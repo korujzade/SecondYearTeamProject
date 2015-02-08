@@ -42,7 +42,7 @@ public class database
   {
     try
     {
-      busDatabase = new database("2014_comp23240_q4", "mbax2ko2",
+      busDatabase = new database("2014_comp23420_q4", "mbax2ko2",
               "asdf1234", "jdbc:mysql://dbhost.cs.man.ac.uk:3306",
               "com.mysql.jdbc.Driver");
       busDatabase.open();
