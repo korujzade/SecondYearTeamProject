@@ -1,6 +1,5 @@
 
 import java.util.Date;
- 
 /**
  * Class which represents information about drivers and their availability.
  * It also allows the application to get and set the number of hours a
@@ -28,6 +27,12 @@ public class DriverInfo
   {
     return database.busDatabase.select_ids("driver_id", "driver", "name");
   }
+  
+  // get drivers from availability table *kamil*
+  public static int[] getAvailabilityDrivers()
+  {
+      return database.busDatabase.select_ids("driver_availability_id", "driver_availability", "driver");
+  }        
 
   /**
    * Find the driver with the specified driver number
@@ -155,5 +160,4 @@ public class DriverInfo
   {
     setAvailable(driver, database.today(), available);
   }
-
 }

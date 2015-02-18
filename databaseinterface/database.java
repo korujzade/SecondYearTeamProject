@@ -150,6 +150,13 @@ public class database
     select("*", source, field1 + " = " + value_string(value1) + " And " + field2 + " = " + value_string(value2), "");
     return move_first();
   }
+  
+  // Select three fields *kamil*
+  public Boolean select_record(String source, String field1,Object value1, String field2, Object value2,String field3, Object value3 )
+  {
+    select("*", source, field1 + " = " + value_string(value1) + " And " + field2 + " = " + value_string(value2) + " And " + field3 + " = " + value_string(value3), "");
+    return move_first();      
+  }        
 
   public int find_id(String table, String field, Object value)
   {
