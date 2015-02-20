@@ -1,5 +1,8 @@
 *.class
 build/*
 nbproject
+.classpath
 build.xml
 manifest.mf
+bin/*
+.settings/*
