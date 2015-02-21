@@ -220,8 +220,8 @@ public class DriverInfo
 		// int driverNumber = Integer.parseInt(driverNumberString);
 		int holidays;
 
-		ArrayList<String> errors = new ArrayList();
-		ArrayList<String> success = new ArrayList();
+		ArrayList<String> errors = new ArrayList<String>();
+		ArrayList<String> success = new ArrayList<String>();
 
 		// cast fromdate and to date which come as string from GUI to localdate
 		// of Joda library
