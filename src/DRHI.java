@@ -260,8 +260,18 @@ public class DRHI{
 					ArrayList<String> messages = new ArrayList<String>();
 					messages = DriverInfo.checkDriverHoliday(ID, start, end);
 					
-					
-//
+					if (DriverInfo.errorsuc == 0)
+						for(int i = 0; i < messages.size(); i++)
+						{
+							MessageDialog.openInformation(shell, "Error ", messages.get(i));
+						}
+					else
+					{						
+						for(int i = 0; i < messages.size(); i++)
+						{
+							MessageDialog.openInformation(shell, "Success ", messages.get(i));
+						}			
+					}
 					
 					
 				}
