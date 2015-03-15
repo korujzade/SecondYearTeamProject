@@ -1,6 +1,7 @@
 package rostering;
 import DRH.BusInfo;
 import DRH.BusStopInfo;
+import DRH.TimetableInfo.timetableKind;
 import DRH.database;
 
 import java.io.ObjectInputStream.GetField;
@@ -13,8 +14,7 @@ import org.joda.time.LocalDate;
 
 public class Rostering
 {
-	
-	private static final Routes Routes = null;
+
 	public static int[] BusIDs;
 
 	public static void assignBuses(int from, int to, Date date)
@@ -37,36 +37,112 @@ public class Rostering
 	
 		// get route ids
 		int[] routeIDs = BusStopInfo.getRoutes();
-		
-		Routes route1 = new Routes(routeIDs[0]);
-		//route1.setTheNumberOfServices();
 
-		
+		// create four route objects
+		Routes route1 = new Routes(routeIDs[0]);
+		Routes route2 = new Routes(routeIDs[1]);
+		Routes route3 = new Routes(routeIDs[2]);
+		Routes route4 = new Routes(routeIDs[3]);
+	
 		// three dimensional array keeps assigned buses for each weekdays, routes and services
-		Object[][][] rosterBus = new Object[6][3][200];
+		Object[][][] rosterBus = new Object[7][4][200];
 		
 		// for weekdays, assign buses to services
 		for (int i = 0; i <= 4; i++)
 		{
+			// for each routes
 			for (int j = 0; j <= 3; j++)
-			{				
-				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
+			{
+				// first route
+				if (j == 0)
 				{
-				// assign bus to services
+					route1.setTheNumberOfServices(timetableKind.weekday);
+					for (int k = 0; k < route1.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
 				}
+				
+				// second route
+				if (j == 1)
+				{	
+					route2.setTheNumberOfServices(timetableKind.weekday);
+					for (int k = 0; k < route2.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+				// fourth route
+				if (j == 2)
+				{
+					route3.setTheNumberOfServices(timetableKind.weekday);
+					for (int k = 0; k < route3.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+				// fifth route
+				if (j == 3)
+				{
+					route4.setTheNumberOfServices(timetableKind.weekday);
+					for (int k = 0; k < route4.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+
 			}					
 		}
 		
-		int i = 5;
+		// Saturday
+		int i = 5;		
 		
 		// for Saturdays
 		while(i == 5)
 		{
 			for (int j = 0; j <= 3; j++)
 			{				
-				for (int k = 0; k <= 200; k++)
+				// first route
+				if (j == 0)
 				{
-				// assign bus to services
+					route1.setTheNumberOfServices(timetableKind.saturday);
+					for (int k = 0; k < route1.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+				// second route
+				if (j == 1)
+				{	
+					route2.setTheNumberOfServices(timetableKind.saturday);
+					for (int k = 0; k < route2.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+				// fourth route
+				if (j == 2)
+				{
+					route3.setTheNumberOfServices(timetableKind.saturday);
+					for (int k = 0; k < route3.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+				// fifth route
+				if (j == 3)
+				{
+					route4.setTheNumberOfServices(timetableKind.saturday);
+					for (int k = 0; k < route4.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
 				}
 			}
 			i++;
@@ -77,17 +153,49 @@ public class Rostering
 		{
 			for (int j = 0; j <= 3; j++)
 			{				
-				for (int k = 0; k <= 200; k++)
+				// first route
+				if (j == 0)
 				{
-				 // assign bus to services
+					route1.setTheNumberOfServices(timetableKind.sunday);
+					for (int k = 0; k < route1.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+				// second route
+				if (j == 1)
+				{	
+					route2.setTheNumberOfServices(timetableKind.sunday);
+					for (int k = 0; k < route2.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+				// fourth route
+				if (j == 2)
+				{
+					route3.setTheNumberOfServices(timetableKind.sunday);
+					for (int k = 0; k < route3.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
+				}
+				
+				// fifth route
+				if (j == 3)
+				{
+					route4.setTheNumberOfServices(timetableKind.sunday);
+					for (int k = 0; k < route4.getTheNumberOfServices(); k++)
+					{
+					//   rosterBus[0][0][0]  = bus1;// assign bus to services
+					}					
 				}
 			}
-			i = 0;
-		}
-
-
-		
-		
+			i++;
+		}		
+	
 	}
 
 	// check if any available bus suitable to assign to work

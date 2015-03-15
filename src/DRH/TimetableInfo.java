@@ -22,7 +22,7 @@ public class TimetableInfo
   private static Calendar calendar = new GregorianCalendar();
 
   /**
-   * The kinds of timetale available. Sunday services run on bank holidays.
+   * The kinds of timetable available. Sunday services run on bank holidays.
    */
   public enum timetableKind {weekday, saturday, sunday};
 
@@ -104,7 +104,7 @@ public class TimetableInfo
   }
   
   /**
-   * Get the service times on a given route for a givrn date
+   * Get the service times on a given route for a given date
    * for a particular service. This method along with the methods to
    * get service information can be used to build up a complete timetable
    */
