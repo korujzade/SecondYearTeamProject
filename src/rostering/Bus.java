@@ -7,6 +7,7 @@ public class Bus
 
 	ArrayList<Integer> endTimes = new ArrayList();
 	int BusID;
+	int time;
 	ArrayList busStops = new ArrayList();
 	
 	public Bus(int busID)
@@ -32,9 +33,9 @@ public class Bus
 		return endTimes;
 	}
 
-	public void setTimes(ArrayList times)
+	public void setEndTimes(int time)
 	{
-		this.endTimes = endTimes;
+		endTimes.add(time);
 	}
 	
 	

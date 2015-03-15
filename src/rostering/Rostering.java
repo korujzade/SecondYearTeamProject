@@ -67,8 +67,25 @@ public class Rostering
 					route1.setTheNumberOfServices(timetableKind.weekday);
 					for (int k = 0; k < route1.getTheNumberOfServices(); k++)
 					{
-					//	Services service1 = new Services(j, k);
-					   //rosterBus[i][j]k]  = bus1;// assign bus to services
+						// send first route and the service to service class to get service 1 object
+					 	Services service1 = new Services(routeIDs[0],k);
+					 	// get this service's "to" time
+					 	int serviceFrom = service1.getFrom();
+					 	// get the number of the busses on the list to check if bus suitable to assign to service
+					 	int busLength = busesToAssign.size();
+					 	for (int bus = 0; bus < busLength; bus++)
+					 	{
+					 		// if suitable
+					 		if (serviceFrom > busesToAssign.get(bus).endTimes.get(busesToAssign.get(bus).endTimes.size() - 1))
+					 		{
+					 			// assign bus
+					 			rosterBus[i][j][k] = busesToAssign.get(bus);
+					 			// set the end time of bus to "to" time of service1
+					 			busesToAssign.get(bus).setEndTimes(service1.getTo());
+					 			break;
+					 		}
+					 	}
+					 	
 					}					
 				}
 				
