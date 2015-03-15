@@ -5,13 +5,14 @@ import java.util.ArrayList;
 public class Bus
 {
 
-	ArrayList endTimes = new ArrayList();
+	ArrayList<Integer> endTimes = new ArrayList();
 	int BusID;
 	ArrayList busStops = new ArrayList();
 	
 	public Bus(int busID)
 	{
 		BusID = busID;
+		endTimes.add(0);
 	}
 
 	public ArrayList getBusStops()

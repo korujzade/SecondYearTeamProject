@@ -29,7 +29,7 @@ public class Main {
 
         
         // debugging
-        int a = TimetableInfo.getNumberOfServices(65, timetableKind.weekday);
+        int a = TimetableInfo.getNumberOfServices(66, timetableKind.weekday);
         System.out.println("services :" + a);
         
         int b[] = TimetableInfo.getServiceTimes(65,timetableKind.weekday ,20);
