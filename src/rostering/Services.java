@@ -5,6 +5,10 @@ public class Services
 	private int from;
 	private int to;
 	private int kind;
+	private int route;
+	private int serviceNumber;
+	
+	//public Services(int route, int serviceNumber)
 	
 	public int getKind()
 	{

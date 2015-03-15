@@ -67,7 +67,7 @@ public class Rostering
 					route1.setTheNumberOfServices(timetableKind.weekday);
 					for (int k = 0; k < route1.getTheNumberOfServices(); k++)
 					{
-						
+					//	Services service1 = new Services(j, k);
 					   //rosterBus[i][j]k]  = bus1;// assign bus to services
 					}					
 				}
