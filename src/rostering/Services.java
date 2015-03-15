@@ -1,5 +1,7 @@
 package rostering;
 
+import DRH.TimetableInfo;
+
 public class Services
 {
 	private int from;
@@ -8,7 +10,11 @@ public class Services
 	private int route;
 	private int serviceNumber;
 	
-	//public Services(int route, int serviceNumber)
+	public Services(int route, int serviceNumber)
+	{
+		this.route = route;
+		this.serviceNumber = serviceNumber;
+	}
 	
 	public int getKind()
 	{
@@ -22,9 +28,9 @@ public class Services
 	{
 		return from;
 	}
-	public void setFrom(int from)
+	public void setFrom()
 	{
-		this.from = from;
+		this.from = TimetableInfo.getServiceTimes(route, serviceNumber)[0];
 	}
 	public int getTo()
 	{
@@ -32,7 +38,7 @@ public class Services
 	}
 	public void setTo(int to)
 	{
-		this.to = to;
+		this.from = TimetableInfo.getServiceTimes(route, serviceNumber)[TimetableInfo.getServiceTimes(route, serviceNumber).length - 1];
 	}
 	
 	
