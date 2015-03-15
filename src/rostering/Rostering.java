@@ -38,17 +38,22 @@ public class Rostering
 		Object[][][] rosterBus = new Object[7][4][200];
 
 		// for weekdays, assign buses to services
-		for (int i = 0; i <= 4; i++)
+		for (int i = 0; i <= 6; i++)
 		{
 			System.out.println("----------------------------");	
-			System.out.println("Day: " + i);
+			System.out.println("Day: " + i + 1);
 			// for each routes
 			for (int j = 0; j <= 3; j++)
 			{
 				System.out.println("--------------------------");
 				System.out.println("Route" + j);
 				Routes route1 = new Routes(routeIDs[j]);
-				route1.setTheNumberOfServices(timetableKind.weekday);
+				if (i <= 4)
+					route1.setTheNumberOfServices(timetableKind.weekday);
+				if (i == 5)
+					route1.setTheNumberOfServices(timetableKind.saturday);
+				if (i == 6)
+					route1.setTheNumberOfServices(timetableKind.sunday);
 				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
 				{
 					// send first route and the service to service class to
