@@ -8,7 +8,7 @@ public class Bus
 	ArrayList<Integer> endTimes = new ArrayList();
 	int BusID;
 	int time;
-	ArrayList busStops = new ArrayList();
+	ArrayList<Integer> busStops = new ArrayList();
 	
 	public Bus(int busID)
 	{

@@ -5,10 +5,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import rostering.Bus;
+import rostering.Rostering;
 
 import DRH.TimetableInfo.timetableKind;
 
@@ -29,12 +35,22 @@ public class Main {
 
         
         // debugging
-        int a = TimetableInfo.getNumberOfServices(66, timetableKind.weekday);
-        System.out.println("services :" + a);
+
         
-        int b[] = TimetableInfo.getServiceTimes(65,timetableKind.weekday ,20);
-        for (int i = 0; i < b.length; i++)
-        	System.out.println("times: " + b[i]);
+        //int a = TimetableInfo.getNumberOfServices(68, timetableKind.weekday);
+//        /System.out.println("68: " + a);
         
+        Rostering.assignBuses();
+        
+
+//
+//        
+//        int a = TimetableInfo.getNumberOfServices(66, timetableKind.weekday);
+//        System.out.println("services :" + a);
+//        
+//        int b[] = TimetableInfo.getServiceTimes(65,timetableKind.weekday ,20);
+//        for (int i = 0; i < b.length; i++)
+//        	System.out.println("times: " + b[i]);
+//        
     }
 }
