@@ -52,34 +52,34 @@ public class Rostering
 			{				
 				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
 				{
-				
+				// assign bus to services
 				}
 			}					
 		}
 		
 		int i = 5;
 		
-		// for saturday
+		// for Saturdays
 		while(i == 5)
 		{
 			for (int j = 0; j <= 3; j++)
 			{				
 				for (int k = 0; k <= 200; k++)
 				{
-				
+				// assign bus to services
 				}
 			}
 			i++;
 		}
 		
-		// for sundays
+		// for Sundays
 		while(i == 6)
 		{
 			for (int j = 0; j <= 3; j++)
 			{				
 				for (int k = 0; k <= 200; k++)
 				{
-				
+				 // assign bus to services
 				}
 			}
 			i = 0;
