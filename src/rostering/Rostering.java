@@ -47,7 +47,7 @@ public class Rostering
 			// for each routes
 			for (int j = 0; j <= 3; j++)
 			{
-				System.out.println("--------------------------");
+				System.out.println("---------------------------");
 				System.out.println("Route: " + (j + 1));
 				Routes route1 = new Routes(routeIDs[j]);
 				timetableKind kind = null;
@@ -112,16 +112,20 @@ public class Rostering
 						System.out.println(" endtimes: " + bus.getEndTimes());
 					}
 				}
-				System.out.println("No of buses used in total (end of the route): " + busesToAssign.size());
+				System.out
+						.println("No of buses used in total (end of the route): "
+								+ busesToAssign.size());
 			}
 
-			System.out.println("No of buses used for this day : " + busesToAssign.size());
-			
-			
+			System.out.println("No of buses used for this day : "
+					+ busesToAssign.size());
+
 			busesToAssign.clear();
 			counter = 0;
 			Bus bus2 = new Bus(BusIDs[counter]);
 			busesToAssign.add(bus2);
 		}
 	}
-}
+
+}// assign buses
+
