@@ -2,6 +2,7 @@ package rostering;
 
 import DRH.BusInfo;
 import DRH.BusStopInfo;
+import DRH.TimetableInfo;
 import DRH.TimetableInfo.timetableKind;
 import DRH.database;
 
@@ -20,13 +21,14 @@ public class Rostering
 
 	public static void assignBuses()
 	{
-		//database.openBusDatabase();
+		// database.openBusDatabase();
 
 		// Buses ArrayList
 		ArrayList<Bus> busesToAssign = new ArrayList();
 		// initially add one bus to the list
 		counter = 0;
 		int[] BusIDs = BusInfo.getBuses();
+		// int[][] BusIDs = new int[BusInfo.getBuses().length][1];
 		Bus bus1 = new Bus(BusIDs[counter]);
 		busesToAssign.add(bus1);
 
@@ -38,27 +40,30 @@ public class Rostering
 		Object[][][] rosterBus = new Object[7][4][200];
 
 		// for weekdays, assign buses to services
-		for (int i = 0; i <= 6; i++)
+		for (int i = 5; i <= 5; i++)
 		{
-			System.out.println("----------------------------");	
-			System.out.println("Day: " + i + 1);
+			System.out.println("----------------------------");
+			System.out.println("Day: " + (i + 1));
 			// for each routes
-			for (int j = 0; j <= 3; j++)
+			for (int j = 0; j <= 0; j++)
 			{
 				System.out.println("--------------------------");
 				System.out.println("Route" + j);
 				Routes route1 = new Routes(routeIDs[j]);
+				timetableKind kind = null;
 				if (i <= 4)
-					route1.setTheNumberOfServices(timetableKind.weekday);
+					kind = timetableKind.weekday;
 				if (i == 5)
-					route1.setTheNumberOfServices(timetableKind.saturday);
+					kind = timetableKind.saturday;
 				if (i == 6)
-					route1.setTheNumberOfServices(timetableKind.sunday);
+					kind = timetableKind.sunday;
+
+				route1.setTheNumberOfServices(kind);
 				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
 				{
 					// send first route and the service to service class to
 					// get service 1 object
-					Services service1 = new Services(routeIDs[j], timetableKind.weekday, k);
+					Services service1 = new Services(routeIDs[j], kind, k);
 					// get this service's "from" time
 					int serviceFrom = service1.getFrom();
 					// get the number of the busses on the list to check if
@@ -75,12 +80,16 @@ public class Rostering
 							rosterBus[i][j][k] = busesToAssign.get(bus);
 							// set the end time of bus to "to" time of
 							// service1
-							busesToAssign.get(bus).setEndTimes(service1.getTo());
-							
+							busesToAssign.get(bus)
+									.setEndTimes(service1.getTo());
+
 							has = true;
-							System.out.print("busID: " + busesToAssign.get(bus).BusID + " ");
-							System.out.print("from: " + service1.getFrom() + " to: " + service1.getTo());
-							System.out.println(" endtimes: " + busesToAssign.get(bus).getEndTimes());
+							System.out.print("busID: "
+									+ busesToAssign.get(bus).BusID + " ");
+							System.out.print("from: " + service1.getFrom()
+									+ " to: " + service1.getTo());
+							System.out.println(" endtimes: "
+									+ busesToAssign.get(bus).getEndTimes());
 							break;
 						}
 					}
@@ -94,74 +103,25 @@ public class Rostering
 						// set the end time of bus to "to" time of service1
 						bus.setEndTimes(service1.getTo());
 
-						System.out.print("busID: " + busesToAssign.get(busesToAssign.size() - 1).BusID + " ");
-						System.out.print("from: " + service1.getFrom() + " to: " + service1.getTo());
+						System.out
+								.print("busID: "
+										+ busesToAssign.get(busesToAssign
+												.size() - 1).BusID + " ");
+						System.out.print("from: " + service1.getFrom()
+								+ " to: " + service1.getTo());
 						System.out.println("busendtimes: " + bus.getEndTimes());
 					}
 				}
 				System.out.println("size for route: " + busesToAssign.size());
 			}
-			
+
 			System.out.println("size: " + busesToAssign.size());
+			
+			
 			busesToAssign.clear();
 			counter = 0;
 			Bus bus2 = new Bus(BusIDs[counter]);
 			busesToAssign.add(bus2);
-			
-			
 		}
-
-		// Saturday
-		int i = 5;
-
-		// for Saturdays
-		while (i == 5)
-		{
-			for (int j = 0; j <= 3; j++)
-			{
-				Routes route1 = new Routes (routeIDs[j]);				
-				route1.setTheNumberOfServices(timetableKind.saturday);
-				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
-				{
-					// rosterBus[0][0][0] = bus1;// assign bus to services
-				}
-			}
-			i++;
-		}
-
-		// for Sundays
-		while (i == 6)
-		{
-			for (int j = 0; j <= 3; j++)
-			{
-				Routes route1 = new Routes(routeIDs[j]);
-				route1.setTheNumberOfServices(timetableKind.sunday);
-				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
-				{
-					// rosterBus[0][0][0] = bus1;// assign bus to services
-				}
-		
-			}
-			i++;
-		}
-
 	}
-
-	// // check if any available bus suitable to assign to work
-	// public static Boolean checkAvBuses()
-	// {
-	// BusIDs = BusInfo.getAvailabilityBuses();
-	// for (int i = 0; i < BusIDs.length; i++)
-	// {
-	// database db = database.busDatabase;
-	// if (db.select_record("bus_availability", "bus_availability_id",
-	// BusIDs[i], "available", 0))
-	// {
-	// return true;
-	// }
-	// else
-	// return false;
-	// }
-	// return false;
-	// }
 }

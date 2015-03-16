@@ -18,7 +18,7 @@ public class Routes
 		super();
 		this.kind = kind;
 		this.routeID = routeID;
-		
+
 		this.routeName = BusStopInfo.getRouteName(routeID);
 
 	}
@@ -34,36 +34,33 @@ public class Routes
 		this.routeName = BusStopInfo.getRouteName(routeID);
 
 	}
-	
-	
 
-	
 	public void setTheNumberOfServices(timetableKind kind)
 	{
-		
-		this.theNumberOfServices = TimetableInfo.getNumberOfServices(routeID, kind);
-		
+
+		this.theNumberOfServices = TimetableInfo.getNumberOfServices(routeID,
+				kind);
+
 	}
-	
+
 	public int getTheNumberOfServices()
 	{
 		return theNumberOfServices;
 	}
 
-	
 	public String getRouteName()
 	{
 		return this.routeName;
 	}
-	
+
 	public void setKind(timetableKind kind)
 	{
 		this.kind = kind;
 	}
-	
+
 	public timetableKind setKind()
 	{
-		  return kind;
+		return kind;
 	}
 
 }

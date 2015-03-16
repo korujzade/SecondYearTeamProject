@@ -35,12 +35,23 @@ public class Main {
 
         
         // debugging
-
+//
+//        int b[] = TimetableInfo.getServices(66, timetableKind.weekday);
+//        for (int i = 0; i < b.length; i++)
+//		{
+//        	int a[] = TimetableInfo.getServiceTimes(66,timetableKind.weekday, i);
+//        	for (int j = 0; j < a.length; j++)
+//			{
+//				System.out.print(" "+ a[j]+" ");
+//			}
+//        	System.out.println();
+//		}
+//        
         
         //int a = TimetableInfo.getNumberOfServices(68, timetableKind.weekday);
 //        /System.out.println("68: " + a);
         
-        Rostering.assignBuses();
+       Rostering.assignBuses();
         
 
 //
