@@ -38,6 +38,10 @@ public class Bus
 		endTimes.add(time);
 	}
 	
+	public int getBusID()
+	{
+		return this.BusID;
+	}
 	
 	
 }

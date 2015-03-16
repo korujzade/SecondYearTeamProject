@@ -4,6 +4,7 @@ package DRH;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +51,29 @@ public class Main {
         
         //int a = TimetableInfo.getNumberOfServices(68, timetableKind.weekday);
 //        /System.out.println("68: " + a);
+//        
+//       int[][] testArray = new int[2][2];
+//       
+//       testArray[0][0] = 1;
+//       testArray[0][1] = 1;
+//       testArray[1][0] = 2;
+//       
+//       int index = 0;
+//       for (int i = 0; i < testArray.length; i++)
+//	   {
+//	     if (testArray[i][0] == 2)
+//	     {
+//	    	 index = i;
+//	    	 testArray[0][1]++;
+//	    	 break;
+//	     }
+//	   }
+//       System.out.println("array length: " + testArray.length);
+//       System.out.println("firt used number: " + testArray[0][1]);
+//       System.out.println("index: " + index);
+//       
+       
+       
         
        Rostering.assignBuses();
         
