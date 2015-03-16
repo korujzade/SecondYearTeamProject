@@ -41,7 +41,7 @@ public class Rostering
 		for (int i = 0; i <= 6; i++)
 		{
 			System.out.println("----------------------------");	
-			System.out.println("Day: " + i + 1);
+			System.out.println("Day: " + (i + 1));
 			// for each routes
 			for (int j = 0; j <= 3; j++)
 			{
@@ -96,7 +96,7 @@ public class Rostering
 
 						System.out.print("busID: " + busesToAssign.get(busesToAssign.size() - 1).BusID + " ");
 						System.out.print("from: " + service1.getFrom() + " to: " + service1.getTo());
-						System.out.println("busendtimes: " + bus.getEndTimes());
+						System.out.println(" busendtimes: " + bus.getEndTimes());
 					}
 				}
 				System.out.println("size for route: " + busesToAssign.size());
@@ -145,7 +145,7 @@ public class Rostering
 			i++;
 		}
 
-	}
+	}//assign buses
 
 	// // check if any available bus suitable to assign to work
 	// public static Boolean checkAvBuses()
