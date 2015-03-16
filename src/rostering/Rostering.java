@@ -40,15 +40,15 @@ public class Rostering
 		Object[][][] rosterBus = new Object[7][4][200];
 
 		// for weekdays, assign buses to services
-		for (int i = 5; i <= 5; i++)
+		for (int i = 0; i <= 6; i++)
 		{
 			System.out.println("----------------------------");
 			System.out.println("Day: " + (i + 1));
 			// for each routes
-			for (int j = 0; j <= 0; j++)
+			for (int j = 0; j <= 3; j++)
 			{
 				System.out.println("--------------------------");
-				System.out.println("Route" + j);
+				System.out.println("Route: " + (j + 1));
 				Routes route1 = new Routes(routeIDs[j]);
 				timetableKind kind = null;
 				if (i <= 4)
@@ -109,13 +109,13 @@ public class Rostering
 												.size() - 1).BusID + " ");
 						System.out.print("from: " + service1.getFrom()
 								+ " to: " + service1.getTo());
-						System.out.println("busendtimes: " + bus.getEndTimes());
+						System.out.println(" endtimes: " + bus.getEndTimes());
 					}
 				}
-				System.out.println("size for route: " + busesToAssign.size());
+				System.out.println("No of buses used in total (end of the route): " + busesToAssign.size());
 			}
 
-			System.out.println("size: " + busesToAssign.size());
+			System.out.println("No of buses used for this day : " + busesToAssign.size());
 			
 			
 			busesToAssign.clear();
