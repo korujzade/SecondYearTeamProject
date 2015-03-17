@@ -8,11 +8,13 @@ public class Driver {
 	private int driverID;
 	public ArrayList<Services> services = new ArrayList<Services>();//store the services this driver is assigned to
 	public ArrayList<Bus> buses = new ArrayList<Bus>();//store the corresponding buses 
+	ArrayList<Integer> endTimes = new ArrayList<Integer>();
 	int hoursToday;
 	
 	public Driver(int driverID) {
 		this.setDriverID(driverID);
 		hoursToday = 0;
+		endTimes.add(0);
 	}
 	
 	public int getHoursToday() {
@@ -21,6 +23,16 @@ public class Driver {
 
 	public void setHoursToday(int hoursToday) {
 		this.hoursToday = hoursToday;
+	}
+	
+	public ArrayList<Integer> getEndTimes()
+	{
+		return endTimes;
+	}
+	
+	public void setEndTimes(int time)
+	{
+		endTimes.add(time);
 	}
 
 	//Add a journey to the drivers work and what bus he will be driving. Also update his hours.

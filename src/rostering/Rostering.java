@@ -1,19 +1,9 @@
 package rostering;
 
-import DRH.BusInfo;
-import DRH.BusStopInfo;
-import DRH.TimetableInfo;
+import DRH.*;
 import DRH.TimetableInfo.timetableKind;
-import DRH.database;
+import java.util.*;
 
-import java.io.ObjectInputStream.GetField;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
-import org.joda.time.LocalDate;
 
 public class Rostering
 {
@@ -24,7 +14,7 @@ public class Rostering
 		// database.openBusDatabase();
 
 		// Buses ArrayList
-		ArrayList<Bus> busesToAssign = new ArrayList();
+		ArrayList<Bus> busesToAssign = new ArrayList<Bus>();
 		// initially add one bus to the list
 		counter = 0;
 //		int[] BusIDs = BusInfo.getBuses();
@@ -179,7 +169,104 @@ public class Rostering
 			Bus bus2 = new Bus(BusIDs[counter][0]);
 			busesToAssign.add(bus2);
 		}
+	}//assign buses
+
+	
+	
+	private static boolean constraintsPassed(Driver d){
+		return true;
 	}
+	
+	public static void assignDrivers() {
+		
+		ArrayList<Driver> driversToAssign = new ArrayList<Driver>();
+		// Start with one driver
+		counter = 0;
+		int[] DriverIDs = DriverInfo.getDrivers();
+		Driver driver1 = new Driver(DriverIDs[counter]);
+		driversToAssign.add(driver1);
 
-}// assign buses
+		int[] routeIDs = BusStopInfo.getRoutes();
 
+		// three dimensional array keeps assigned buses for each weekdays,
+		// routes and services - same as buses
+		Object[][][] rosterDriver = new Object[7][4][200];
+
+		// for each day assign drivers to services
+		// i - day, j - route, k - service
+		for (int i = 0; i <= 6; i++)
+		{
+			System.out.println("----------------------------");	
+			System.out.println("Day: " + (i + 1));
+			for (int j = 0; j <= 3; j++)
+			{
+				System.out.println("--------------------------");
+				System.out.println("Route" + j);
+				Routes route1 = new Routes(routeIDs[j]);
+				if (i <= 4)
+					route1.setTheNumberOfServices(timetableKind.weekday);
+				if (i == 5)
+					route1.setTheNumberOfServices(timetableKind.saturday);
+				if (i == 6)
+					route1.setTheNumberOfServices(timetableKind.sunday);
+				
+				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
+				{
+					// get kth service of current (jth) route
+					Services service1 = new Services(routeIDs[j], timetableKind.weekday, k);
+					// get this service's "from" (start) time
+					int serviceFrom = service1.getFrom();
+					boolean has = false;
+					//check each driver in assignment list
+					for (int driver = 0; driver < driversToAssign.size(); driver++)
+					{
+						// if suitable
+						//last element in this drivers' endtimes list
+						int element = (driversToAssign.get(driver).endTimes.size()) - 1;
+						int a = driversToAssign.get(driver).endTimes.get(element);
+						if (constraintsPassed(driversToAssign.get(driver)))//serviceFrom > driversToAssign.get(driver).endTimes.get(element))
+						{
+							// assign driver
+							rosterDriver[i][j][k] = driversToAssign.get(driver);
+							// set the end time of bus to "to" time of
+							// service1
+							driversToAssign.get(driver).setEndTimes(service1.getTo());
+
+							has = true;
+							System.out.print("DriverID: " + driversToAssign.get(driver).getDriverID() + " ");
+							//System.out.print("busID: " + busesToAssign.get(bus).BusID + " ");
+							System.out.print("from: " + service1.getFrom() + " to: " + service1.getTo());
+							System.out.println(" endtimes: " + driversToAssign.get(driver).getEndTimes());
+							break;
+						}
+					}
+					
+					// not found any bus suitable to service in list
+					if (!has)
+					{
+						counter++;
+						Driver driver = new Driver(DriverIDs[counter]);
+						driversToAssign.add(driver);
+						rosterDriver[i][j][k] = driver;
+						// set the end time of bus to "to" time of service1
+						driver.setEndTimes(service1.getTo());
+
+						System.out.print("DriverID: " + driversToAssign.get(driversToAssign.size() - 1).getDriverID() + " ");
+						System.out.print("from: " + service1.getFrom() + " to: " + service1.getTo());
+						System.out.println(" driverendtimes: " + driver.getEndTimes());
+					}
+				}
+				System.out.println("size for route: " + driversToAssign.size());
+			}
+
+			System.out.println("size: " + driversToAssign.size());
+			driversToAssign.clear();
+			counter = 0;
+			Driver driver2 = new Driver(DriverIDs[counter]);
+			driversToAssign.add(driver2);
+
+
+		}
+	}
+	
+}//class
