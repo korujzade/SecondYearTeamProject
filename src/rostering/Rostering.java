@@ -169,24 +169,15 @@ public class Rostering
 			Bus bus2 = new Bus(BusIDs[counter][0]);
 			busesToAssign.add(bus2);
 		}
+
+		Bus newBus = (Bus) rosterBus[0][3][1];
+		newBus.getBusID();
+
 	}// assign buses
 
-	private static boolean constraintsPassed(Driver d, Services s)
-	{
-		boolean breakTime = d.getBreaking();
-		int minsWeek = d.getHoursThisWeek();
-		int minsToday = d.getMinsToday();
-		int upTillNow = s.getServiceTime();
-		
-		if (ConstraintsForDriver.maxDriveTimePerDay(minsToday, upTillNow)
-				&& ConstraintsForDriver
-						.maxDriveTimePerWeek(minsWeek, upTillNow)
-				&& ConstraintsForDriver.continuousWork(minsToday, upTillNow,
-						breakTime))
-			return true;
-		else
-			return false;
-	}
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static void assignDrivers(Date date)
 	{
@@ -195,12 +186,13 @@ public class Rostering
 		// Start with one driver
 		counter = 0;
 		int[] DriverIDs = DriverInfo.getDrivers();
-		while(!(DriverInfo.isAvailable(DriverIDs[counter], date)))
+		while (!(DriverInfo.isAvailable(DriverIDs[counter], date)))
 		{
 			counter++;
 		}
-		
+
 		Driver driver1 = new Driver(DriverIDs[counter]);
+		driver1.setHoursToday(0);
 		driversToAssign.add(driver1);
 
 		int[] routeIDs = BusStopInfo.getRoutes();
@@ -244,28 +236,41 @@ public class Rostering
 								.size()) - 1;
 						int a = driversToAssign.get(driver).endTimes
 								.get(element);
-						if (constraintsPassed(driversToAssign.get(driver), service1))
-						{
-							// assign driver
-							rosterDriver[i][j][k] = driversToAssign.get(driver);
-							// set the end time of bus to "to" time of
-							// service1
-							driversToAssign.get(driver).setEndTimes(
-									service1.getTo());
 
-							has = true;
-							System.out.print("DriverID: "
-									+ driversToAssign.get(driver).getDriverID()
-									+ " ");
-							// System.out.print("busID: " +
-							// busesToAssign.get(bus).BusID + " ");
-							System.out.print("from: " + service1.getFrom()
-									+ " to: " + service1.getTo());
-							System.out
-									.println(" endtimes: "
-											+ driversToAssign.get(driver)
-													.getEndTimes());
-							break;
+						// constraints for drivers
+						if (ConstraintsForDriver.checkConstraints(
+								driversToAssign.get(driver), service1))
+						{
+							// legality
+							if (serviceFrom > a)
+							{
+								// assign driver
+								rosterDriver[i][j][k] = driversToAssign
+										.get(driver);
+								// set the end time of bus to "to" time of
+								// service1
+								driversToAssign.get(driver).setEndTimes(
+										service1.getTo());
+
+								// update driver's work time this week
+								driversToAssign.get(driver).setMinsThisWeek(
+										driversToAssign.get(driver)
+												.getHoursThisWeek()
+												+ service1.getServiceTime());
+								has = true;
+								System.out.print("DriverID: "
+										+ driversToAssign.get(driver)
+												.getDriverID() + " ");
+								
+								System.out.print("from: " + service1.getFrom()
+										+ " to: " + service1.getTo());
+								
+								System.out.println(" endtimes: "
+										+ driversToAssign.get(driver)
+												.getEndTimes());
+								break;
+							}
+
 						}
 					}
 
@@ -273,11 +278,23 @@ public class Rostering
 					if (!has)
 					{
 						counter++;
+						while (!(DriverInfo.isAvailable(DriverIDs[counter],
+								date))
+								&& DriverInfo
+										.getHoursThisWeek(DriverIDs[counter]) < 3000)
+						{
+							counter++;
+						}
+
 						Driver driver = new Driver(DriverIDs[counter]);
 						driversToAssign.add(driver);
 						rosterDriver[i][j][k] = driver;
 						// set the end time of bus to "to" time of service1
 						driver.setEndTimes(service1.getTo());
+
+						// update driver's work time this week
+						driver.setMinsThisWeek(driver.getHoursThisWeek()
+								+ service1.getServiceTime());
 
 						System.out.print("DriverID: "
 								+ driversToAssign.get(

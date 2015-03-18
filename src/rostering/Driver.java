@@ -17,7 +17,7 @@ public class Driver {
 	
 	public Driver(int driverID) {
 		this.setDriverID(driverID);
-		hoursToday = 0;
+		minsToday = 0;
 		endTimes.add(0);
 	}
 	
@@ -25,8 +25,8 @@ public class Driver {
 		return minsToday;
 	}
 
-	public void setHoursToday(int hoursToday) {
-		this.hoursToday = hoursToday;
+	public void setHoursToday(int minsToday) {
+		this.minsToday = minsToday;
 	}
 	
 	public ArrayList<Integer> getEndTimes()
@@ -45,7 +45,7 @@ public class Driver {
         buses.add(bus);
         int driveTime = service.getTo() - service.getFrom(); //length of time for this journey
         //update the driver's hours accordingly
-        hoursToday += driveTime;
+        minsToday += driveTime;
 	    DriverInfo.setHoursThisWeek(driverID, driveTime + DriverInfo.getHoursThisWeek(driverID));
 	    DriverInfo.setHoursThisYear(driverID, driveTime + DriverInfo.getHoursThisYear(driverID));
 	}
@@ -60,7 +60,7 @@ public class Driver {
 	}
 	
 	// set the mins driver work each week to database 
-	public void setHoursThisWeek(int mins)
+	public void setMinsThisWeek(int mins)
 	{
 		DriverInfo.setHoursThisWeek(driverID, mins);
 	}
