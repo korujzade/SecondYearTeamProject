@@ -6,6 +6,8 @@ public class ConstraintsForDriver
 	
 	public static boolean checkConstraints(Driver newDriver, Services newService)
 	{
+		int htw = newDriver.getHoursThisWeek();
+		
 		if(!maxDriveTimePerDay(newDriver.getMinsToday(), newService.getServiceTime()))
 		{
 			return false;

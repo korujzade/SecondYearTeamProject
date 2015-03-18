@@ -252,6 +252,13 @@ public class Rostering
 								driversToAssign.get(driver).setEndTimes(
 										service1.getTo());
 
+								// update driver's work time today
+								driversToAssign.get(driver).setHoursToday(
+										driversToAssign.get(driver)
+												.getMinsToday()
+												+ service1.getServiceTime());
+								
+								
 								// update driver's work time this week
 								driversToAssign.get(driver).setMinsThisWeek(
 										driversToAssign.get(driver)
@@ -274,7 +281,7 @@ public class Rostering
 						}
 					}
 
-					// not found any bus suitable to service in list
+					// not found any driver suitable to service in list
 					if (!has)
 					{
 						counter++;
