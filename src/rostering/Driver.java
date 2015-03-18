@@ -9,7 +9,11 @@ public class Driver {
 	public ArrayList<Services> services = new ArrayList<Services>();//store the services this driver is assigned to
 	public ArrayList<Bus> buses = new ArrayList<Bus>();//store the corresponding buses 
 	ArrayList<Integer> endTimes = new ArrayList<Integer>();
-	int hoursToday;
+	int minsToday;
+	int hoursThisWeek;
+	boolean breaking = false;
+	int breakFrom = 0;
+	int breakTo = 0;
 	
 	public Driver(int driverID) {
 		this.setDriverID(driverID);
@@ -17,8 +21,8 @@ public class Driver {
 		endTimes.add(0);
 	}
 	
-	public int getHoursToday() {
-		return hoursToday;
+	public int getMinsToday() {
+		return minsToday;
 	}
 
 	public void setHoursToday(int hoursToday) {
@@ -55,13 +59,31 @@ public class Driver {
 		this.driverID = driverID;
 	}
 	
+	// set the mins driver work each week to database 
+	public void setHoursThisWeek(int mins)
+	{
+		DriverInfo.setHoursThisWeek(driverID, mins);
+	}
+	
+	// get from database
 	//does what it says on the tin, directly gets from DriverInfo method
 	int getHoursThisWeek(){
 		return DriverInfo.getHoursThisWeek(driverID);
 	}
 		
-	int getHoursThisYear(){
+	int getHoursThisYear()
+	{
 		return DriverInfo.getHoursThisYear(driverID);
+	}
+	
+	public void setBreaking(boolean breaking)
+	{
+		this.breaking = breaking;
+	}
+	
+	public boolean getBreaking()
+	{
+		return this.breaking;
 	}
 	
 }

@@ -41,5 +41,10 @@ public class Services
 	{
 		return to;
 	}
+	
+	public int getServiceTime()
+	{
+		return to - from;
+	}
 
 }

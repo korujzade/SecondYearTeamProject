@@ -8,6 +8,9 @@ public class Bus
 	ArrayList<Integer> endTimes = new ArrayList();
 	int BusID;
 	int time;
+//	int from;
+//	int to;
+//	int ServiceID:
 	ArrayList<Integer> busStops = new ArrayList();
 	
 	public Bus(int busID)
