@@ -73,9 +73,20 @@ public class Main {
 //       System.out.println("index: " + index);
 //       
        
+       String date = "2015-02-05"; 
+       LocalDate datejd = new LocalDate(date);
        
-        
-       Rostering.assignBuses();
+       Date datedf = datejd.toDate();
+       int[] DriverIDs = DriverInfo.getDrivers();
+       int sz = DriverIDs.length;
+       
+       //reset hours this week
+       for(int i=0; i<sz; i++){
+    	   DriverInfo.setHoursThisWeek(DriverIDs[i], 0);
+       }
+
+             
+       Rostering.assignDrivers(datedf);
         
 
 //
