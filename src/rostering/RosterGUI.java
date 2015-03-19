@@ -2,11 +2,11 @@ package rostering;
 
 
 
-
 import java.text.ParseException;
 import java.util.Date;
 
 import DRH.*;
+import DRH.TimetableInfo.timetableKind;
 import rostering.*;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -133,15 +133,28 @@ public class RosterGUI {
 	btnNewButton.addSelectionListener(new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String DATE_FORMAT_NOW = "yyyy-MM-dd";
-			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
-			try {
-				datedf = sdf.parse(text_1.getText());
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-			rosterDrivers = Rostering.assignDrivers(datedf);
+			  //reset hours this week
+		       for(int i=0; i<sz; i++){
+		    	   DriverInfo.setHoursThisWeek(DriverIDs[i], 0);
+		       }
+			
+			// UNCOMMENT
+//			String DATE_FORMAT_NOW = "yyyy-MM-dd";
+//			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+//			try {
+//				datedf = sdf.parse(text_1.getText());
+//			} catch (ParseException e1) {
+//				e1.printStackTrace();
+//			}
+//			rosterDrivers = Rostering.assignDrivers(datedf);
 			// rosterBuses = Rostering.assignBuses();
+			
+		    // COMMENT
+			String date = "2015-02-05"; 
+		    LocalDate datejd = new LocalDate(date);
+   		    datedf = datejd.toDate();
+			rosterDrivers = Rostering.assignDrivers(datedf);
+			
 		}
 	});
 	btnNewButton.setBounds(113, 121, 129, 31);
@@ -155,28 +168,35 @@ public class RosterGUI {
 	btnNewButton_3.addSelectionListener(new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String datestr = text_1.getText();
-			String DATE_FORMAT_NOW = "yyyy-MM-dd";
-			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
-			try {
-				Date date2 = sdf.parse(datestr);
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(date2);
-				boolean monday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
-				if (monday) {
-					spawn.setEnabled(true);
-					btnNewButton_1.setEnabled(true);
-					btnNewButton.setEnabled(true);
-				}
-				else {
-					text_1.setText("Day needs to be Monday");
-				}
+			// UNCOMMENT
+//			String datestr = text_1.getText();
+//			String DATE_FORMAT_NOW = "yyyy-MM-dd";
+//			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+//			try {
+//				Date date2 = sdf.parse(datestr);
+//				Calendar cal = Calendar.getInstance();
+//				cal.setTime(date2);
+//				boolean monday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+//				if (monday) {
+//					spawn.setEnabled(true);
+//					btnNewButton_1.setEnabled(true);
+//					btnNewButton.setEnabled(true);
+//				}
+//				else {
+//					text_1.setText("Day needs to be Monday");
+//				}
+//			
+//			}
+//			catch(ParseException ex) {
+//				MessageDialog.openError(shell, "ERROR",
+//						"Date format : yyyy-mm-dd !");
+//			}
 			
-			}
-			catch(ParseException ex) {
-				MessageDialog.openError(shell, "ERROR",
-						"Date format : yyyy-mm-dd !");
-			}
+		    // COMMENT
+			spawn.setEnabled(true);
+			btnNewButton_1.setEnabled(true);
+			btnNewButton.setEnabled(true);
+			
 			
 		}
 	});
@@ -207,6 +227,8 @@ public class RosterGUI {
   } 
   
   Driver mynigga;
+  Services myservice;
+  Bus mybus;
   
   private class DriverShell { 
     protected Shell shell;
@@ -245,14 +267,14 @@ public class RosterGUI {
 		tblclmnNewColumn.setText("To");
 		
 		// Kamil's method
-		int rows = 1; 
-		for (int i = 0; i < rows; i++) {
-			TableItem item = new TableItem(table, SWT.NONE);
-		    item.setText(0, "" );
-		    
-		    item.setText(1, "");
-		    item.setText(2, "");
-		}
+//		int rows = 1; 
+//		for (int i = 0; i < rows; i++) {
+//			TableItem item = new TableItem(table, SWT.NONE);
+//		    item.setText(0, "" );
+//		    
+//		    item.setText(1, "");
+//		    item.setText(2, "");
+//		}
 		
 		scrolledComposite.setContent(table);
 		scrolledComposite.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -267,22 +289,25 @@ public class RosterGUI {
 		btnNewButton.setBounds(307, 732, 77, 31);
 		btnNewButton.setText("OK");
 		
-		final Combo combo = new Combo(shell, SWT.NONE);
-		combo.setBounds(85, 21, 129, 29);
+		final Text text = new Text(shell, SWT.BORDER);
+		text.setBounds(103, 21, 100, 27);
 		
-		for (int i = 0; i < DriverInfo.getDrivers().length; i++) 
-		{
-			int temp = DriverInfo.getDrivers()[i];
-			StringBuilder sb = new StringBuilder();
-			sb.append("");
-			sb.append(temp);
-			String number = sb.toString();
-			combo.add(number);
-		}
+//		final Combo combo = new Combo(shell, SWT.NONE);
+//		combo.setBounds(85, 21, 129, 29);
+//		
+//		for (int i = 0; i < DriverInfo.getDrivers().length; i++) 
+//		{
+//			int temp = DriverInfo.getDrivers()[i];
+//			StringBuilder sb = new StringBuilder();
+//			sb.append("");
+//			sb.append(temp);
+//			String number = sb.toString();
+//			combo.add(number);
+//		}
 		
 		
 		Label lblNewLabel = new Label(shell, SWT.NONE);
-		lblNewLabel.setBounds(21, 21, 58, 17);
+		lblNewLabel.setBounds(25, 21, 72, 17);
 		lblNewLabel.setText("Driver ID :");
 		
 		Label lblDay = new Label(shell, SWT.NONE);
@@ -328,21 +353,24 @@ public class RosterGUI {
 						selectionint = 6;
 						break;
 				}
-				String did = combo.getText();
+				String did = text.getText();
 				mynigga = Rostering.assignedDriverID(did, selectionint);
 				
 				table.setRedraw(true);
 				
 				// Kamil's method
 				int rows = mynigga.getServiceNumbersAssigned().size(); 
-				for (int i = 0; i < rows; i++) {
+				
+				for (int i = 0; i < rows; i++)
+				{
+					myservice = new Services(mynigga.getRoutesAssigned().get(i), timetableKind.weekday, i );
 					TableItem item = new TableItem(table, SWT.NONE);
-				    item.setText(0, "asaa");
-				    item.setText(1, "2");
-				    item.setText(2, "3");
+				    item.setText(0, mynigga.getServiceIDsAssigned().get(i).toString());
+				    item.setText(1, "niggasBus");
+				    item.setText(2, myservice.getFrom().toString());
+				    item.setText(3, myservice.getTo().toString());
 				}
 				
-			
 			}
 		});
 		btnNewButton_1.setBounds(464, 21, 88, 29);
@@ -392,13 +420,13 @@ public class RosterGUI {
 			scrolledComposite.setContent(table);
 			
 			// Kamil's method
-			int rows = 30;
-			for (int i = 0; i < rows; i++) {
-				TableItem item = new TableItem(table, SWT.NONE);
-			    item.setText(0, "1");
-			    item.setText(1, "2");
-			    item.setText(2, "3");
-			}
+//			int rows = 1;
+//			for (int i = 0; i < rows; i++) {
+//				TableItem item = new TableItem(table, SWT.NONE);
+//			    item.setText(0, "");
+//			    item.setText(1, "");
+//			    item.setText(2, "");
+//			}
 			
 			Label lblDriver = new Label(shell, SWT.NONE);
 			lblDriver.setText("Driver ID :");
@@ -425,8 +453,14 @@ public class RosterGUI {
 			button.setBounds(307, 732, 77, 31);
 
 			// Kamil's method
-			combo.add("2014");
-			combo.add("2015");
+			for (int i = 0; i < DriverInfo.getDrivers().length; i++)  {
+				int temp = DriverInfo.getDrivers()[i];
+				StringBuilder sb = new StringBuilder();
+				sb.append("");
+				sb.append(temp);
+				String number = sb.toString();
+				combo.add(number);
+			}
 			
 			Label lblView = new Label(shell, SWT.NONE);
 			lblView.setText("View :");

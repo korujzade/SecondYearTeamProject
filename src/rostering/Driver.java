@@ -16,8 +16,18 @@ public class Driver {
 	int breakTo = 0;
 	
 	public ArrayList<Integer> serviceIDsAssigned = new ArrayList<Integer>();
+	public ArrayList<Integer> serviceNumbersAssigned = new ArrayList<Integer>();
+	public ArrayList<Integer> routesAssigned = new ArrayList<Integer>();
 
-
+	public void setRoutesAssigned(int id)
+	{
+		routesAssigned.add(id);
+	}
+	
+	public ArrayList<Integer> getRoutesAssigned()
+	{
+		return routesAssigned;
+	}
 
 	public void setServiceIDsAssigned(int id)
 	{
@@ -29,7 +39,6 @@ public class Driver {
 		return serviceIDsAssigned;
 	}	
 
-	public ArrayList<Integer> serviceNumbersAssigned = new ArrayList<Integer>();
 	
 	public Driver(int driverID) {
 		this.setDriverID(driverID);

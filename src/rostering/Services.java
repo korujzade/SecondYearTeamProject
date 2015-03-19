@@ -5,8 +5,8 @@ import DRH.TimetableInfo.timetableKind;
 
 public class Services
 {
-	private int from;
-	private int to;
+	public Integer from;
+	public Integer to;
 	private int kind;
 	private int route;
 	private int serviceNumber;
@@ -32,14 +32,14 @@ public class Services
 		this.kind = kind;
 	}
 
-	public int getFrom()
+	public Integer getFrom()
 	{
-		return from;
+		return this.from;
 	}
 
-	public int getTo()
+	public Integer getTo()
 	{
-		return to;
+		return this.to;
 	}
 	
 	public int getServiceTime()
