@@ -1,8 +1,11 @@
 package DRH;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import rostering.Driver;
 
 /**
  * This class contains the code which actually does the database access. You
@@ -174,6 +177,77 @@ public class database
 				+ field2 + " = " + value_string(value2) + " And " + field3
 				+ " = " + value_string(value3), "");
 		return move_first();
+	}
+	
+	// Razvan
+	public ArrayList<Driver> driver_selection(String source, String field1, int threshold,int limit, String field2, Date date)
+	{
+		try
+		{
+			ArrayList<Driver> result = new ArrayList<Driver>();
+			Statement s = connection.createStatement();
+			s.execute("Select * From " + source + "WHERE" + field1 + "<>" + threshold + "ORDER_BY" + "" + field2);
+			
+			int limits = 0;
+			
+			if (results != null)
+				results.close();
+			results = s.getResultSet();
+			
+			while(results.next() || limits == limit)
+			{
+				int id = results.getInt("driver_id");
+				if(DriverInfo.isAvailable(id,date))
+				{
+					Driver driver = new Driver(id);
+					result.add(driver);
+					limits ++;
+				}
+			}
+			
+			return result;
+		} 
+		catch (Exception ex)
+		{
+			throw new InvalidQueryException("Database access failed");
+		}
+		
+	}
+	
+	// Razvan
+	public ArrayList<Driver> driver_selection(String source, String field1, int limit, Date date)
+	{
+		try
+		{
+			ArrayList<Driver> result = new ArrayList<Driver>();
+			Statement s = connection.createStatement();
+			s.execute("Select * From " + source + "ORDER_BY" + "" + field1 );
+			
+			int limits = 0;
+			
+			if (results != null)
+				results.close();
+			results = s.getResultSet();
+			
+			while(results.next() || limits == 20)
+			{
+				int id = results.getInt("driver_id");
+				if(DriverInfo.isAvailable(id,date))
+				{
+					Driver driver = new Driver(id);
+					result.add(driver);
+					limits ++;
+				}
+			}
+			
+			return result;
+				
+		} 
+		catch (Exception ex)
+		{
+			throw new InvalidQueryException("Database access failed");
+		}
+		
 	}
 
 	public int find_id(String table, String field, Object value)

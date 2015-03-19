@@ -14,6 +14,8 @@ public class Driver {
 	boolean breaking = false;
 	int breakFrom = 0;
 	int breakTo = 0;
+
+	public ArrayList<Integer> serviceNumbersAssigned = new ArrayList<Integer>();
 	
 	public Driver(int driverID) {
 		this.setDriverID(driverID);
@@ -21,6 +23,22 @@ public class Driver {
 		endTimes.add(0);
 	}
 	
+
+
+
+	public void setServiceNumbersAssigned(int number)
+	{
+		this.serviceNumbersAssigned.add(number);
+	}
+
+	
+	public ArrayList<Integer> getServiceNumbersAssigned()
+	{
+		return serviceNumbersAssigned;
+	}
+
+
+
 	public int getMinsToday() {
 		return minsToday;
 	}
