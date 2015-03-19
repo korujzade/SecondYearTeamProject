@@ -222,6 +222,7 @@ public class RosterGUI {
   } 
   
   Driver mynigga;
+  Services myservice;
   
   private class DriverShell { 
     protected Shell shell;
@@ -348,17 +349,20 @@ public class RosterGUI {
 				}
 				String did = text.getText();
 				mynigga = Rostering.assignedDriverID(did, selectionint);
+
 				
 				table.setRedraw(true);
 				
 				// Kamil's method
 				int rows = mynigga.getServiceNumbersAssigned().size(); 
 				
-				for (int i = 0; i < rows; i++) {
+				for (int i = 0; i < rows; i++)
+				{
+					
 					TableItem item = new TableItem(table, SWT.NONE);
 				    item.setText(0, mynigga.getServiceIDsAssigned().get(i).toString());
 				    item.setText(1, "2");
-				    item.setText(2, "3");
+//				    item.setText(2, myservice);
 				    item.setText(3, "4");
 				}
 				
