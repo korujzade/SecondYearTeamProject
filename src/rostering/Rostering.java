@@ -384,7 +384,6 @@ public class Rostering
 	
 	public static Driver assignedDriverID(String idst, int weekday)
 	{
-
 		// get all routes
 		int[] routeIDs = BusStopInfo.getRoutes();
 		
@@ -397,12 +396,25 @@ public class Rostering
 		{
 			for (int j = 0; j <= 3; j++)
 			{
+				timetableKind kind = null;
 				Routes route1 = new Routes(routeIDs[j]);
-				route1.setTheNumberOfServices(timetableKind.sunday);
+				if (weekday <= 4)
+					kind = timetableKind.weekday;
+				else if (weekday == 5)
+					kind = timetableKind.saturday;
+				else if (weekday == 6)
+					kind = timetableKind.sunday;
+					
+				route1.setTheNumberOfServices(kind);
 				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
 				{
 					if(driverRoster[i][j][k].getDriverID() == id)
 					{
+						for(int i2 = 0; i2 < driverRoster[i][j][k].getServiceNumbersAssigned().size(); i2++)
+						{
+							int[] services = TimetableInfo.getServices(routeIDs[j], kind);
+							driverRoster[i][j][k].setServiceNumbersAssigned(driverRoster[i][j][k].getServiceNumbersAssigned().get(i2));
+						}
 						return driverRoster[i][j][k];
 					}
 					else

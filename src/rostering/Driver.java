@@ -14,6 +14,20 @@ public class Driver {
 	boolean breaking = false;
 	int breakFrom = 0;
 	int breakTo = 0;
+	
+	public ArrayList<Integer> serviceIDsAssigned = new ArrayList<Integer>();
+
+
+
+	public void setServiceIDsAssigned(int id)
+	{
+		this.serviceIDsAssigned.add(id);
+	}
+	
+	public ArrayList<Integer> getServiceIDsAssigned()
+	{
+		return serviceIDsAssigned;
+	}	
 
 	public ArrayList<Integer> serviceNumbersAssigned = new ArrayList<Integer>();
 	

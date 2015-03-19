@@ -91,12 +91,14 @@ public class Main {
 
        int[] services = TimetableInfo.getServices(68, timetableKind.weekday);
        
-       System.out.println("service first: " + services[0] + " route first " + routeIDs[0]);
+       System.out.println("service first: " + services[1] + " route first " + routeIDs[0]);
        
 
 		Routes route1 = new Routes(routeIDs[0]);
        route1.setTheNumberOfServices(timetableKind.weekday);
-       int from = TimetableInfo.getServiceTimes(68, timetableKind.weekday, 0)[0];
+       int from = TimetableInfo.getServiceTimes(68, timetableKind.weekday, 1)[0];
+       
+       
        
        System.out.println("from: " + from);
      // Rostering.assignDrivers(datedf);
