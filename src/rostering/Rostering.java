@@ -276,6 +276,12 @@ public class Rostering
 							// legality II
 							if (serviceFrom > lastEndTime)
 							{
+								
+
+								//set serviceNumberToDriver
+								driversToAssign
+								.get(driver).setServiceNumbersAssigned(k);
+								
 								// assign driver
 								rosterDriver[i][j][k] = driversToAssign
 										.get(driver);
@@ -297,8 +303,6 @@ public class Rostering
 												+ service1.getServiceTime());
 								has = true;
 								
-								//set serviceNumberToDriver
-								driver1.setServiceNumbersAssigned(k);
 								
 								System.out.print("DriverID: "
 										+ driversToAssign.get(driver)
@@ -332,10 +336,12 @@ public class Rostering
 
 						Driver driver = new Driver(DriverIDs[counter]);
 						driversToAssign.add(driver);
-						rosterDriver[i][j][k] = driver;
+						
 
 						//set serviceNumberToDriver
 						driver.setServiceNumbersAssigned(k);
+						rosterDriver[i][j][k] = driver;
+
 						
 						// set the end time of bus to "to" time of service1
 						driver.setEndTimes(service1.getTo());
@@ -387,17 +393,20 @@ public class Rostering
 		
 		Driver[][][] driverRoster = rosterDriver;
 		
-		for (int i = weekday; i < weekday; i++)
+		for (int i = weekday; i <= weekday; i++)
 		{
-			for (int j = 0; j < 3; j++)
+			for (int j = 0; j <= 3; j++)
 			{
 				Routes route1 = new Routes(routeIDs[j]);
+				route1.setTheNumberOfServices(timetableKind.sunday);
 				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
 				{
 					if(driverRoster[i][j][k].getDriverID() == id)
 					{
 						return driverRoster[i][j][k];
 					}
+					else
+						System.out.println("test");
 				}
 			}
 			
