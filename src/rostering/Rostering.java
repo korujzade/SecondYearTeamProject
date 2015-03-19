@@ -43,12 +43,12 @@ public class Rostering
 		Bus[][][] rosterBus = new Bus[7][4][200];
 
 		// for weekdays, assign buses to services
-		for (int i = 0; i <= 0; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			System.out.println("----------------------------");
 			System.out.println("Day: " + (i + 1));
 			// for each routes
-			for (int j = 0; j <= 0; j++)
+			for (int j = 0; j < 4; j++)
 			{
 				System.out.println("---------------------------");
 				System.out.println("Route: " + (j + 1));
@@ -84,8 +84,15 @@ public class Rostering
 							rosterBus[i][j][k] = busesToAssign.get(bus);
 							// set the end time of bus to "to" time of
 							// service1
-							busesToAssign.get(bus)
+							if(j != 2){
+							  busesToAssign.get(bus)
 									.setEndTimes(service1.getTo());
+							}
+							//if route 3 - allow 15 mins to get back
+							else {
+							  busesToAssign.get(bus)
+								.setEndTimes(service1.getTo() + 15);
+							}
 
 							// get the id of the just assigned to service
 							// increase the number of the times this bus used
@@ -116,7 +123,8 @@ public class Rostering
 						busesToAssign.add(bus);
 						rosterBus[i][j][k] = bus;
 						// set the end time of bus to "to" time of service1
-						bus.setEndTimes(service1.getTo());
+						if (j != 2) {bus.setEndTimes(service1.getTo());}
+						else {bus.setEndTimes(service1.getTo() + 15);}
 
 						// increase the number of the times this bus used
 						int id = bus.getBusID();
@@ -276,12 +284,6 @@ public class Rostering
 							// legality II
 							if (serviceFrom > lastEndTime)
 							{
-								
-
-								//set serviceNumberToDriver
-								driversToAssign
-								.get(driver).setServiceNumbersAssigned(k);
-								
 								// assign driver
 								rosterDriver[i][j][k] = driversToAssign
 										.get(driver);
@@ -303,6 +305,8 @@ public class Rostering
 												+ service1.getServiceTime());
 								has = true;
 								
+								//set serviceNumberToDriver
+								driver1.setServiceNumbersAssigned(k);
 								
 								System.out.print("DriverID: "
 										+ driversToAssign.get(driver)
@@ -336,12 +340,10 @@ public class Rostering
 
 						Driver driver = new Driver(DriverIDs[counter]);
 						driversToAssign.add(driver);
-						
+						rosterDriver[i][j][k] = driver;
 
 						//set serviceNumberToDriver
 						driver.setServiceNumbersAssigned(k);
-						rosterDriver[i][j][k] = driver;
-
 						
 						// set the end time of bus to "to" time of service1
 						driver.setEndTimes(service1.getTo());
@@ -384,6 +386,7 @@ public class Rostering
 	
 	public static Driver assignedDriverID(String idst, int weekday)
 	{
+
 		// get all routes
 		int[] routeIDs = BusStopInfo.getRoutes();
 		
@@ -392,33 +395,17 @@ public class Rostering
 		
 		Driver[][][] driverRoster = rosterDriver;
 		
-		for (int i = weekday; i <= weekday; i++)
+		for (int i = weekday; i < weekday; i++)
 		{
-			for (int j = 0; j <= 3; j++)
+			for (int j = 0; j < 3; j++)
 			{
-				timetableKind kind = null;
 				Routes route1 = new Routes(routeIDs[j]);
-				if (weekday <= 4)
-					kind = timetableKind.weekday;
-				else if (weekday == 5)
-					kind = timetableKind.saturday;
-				else if (weekday == 6)
-					kind = timetableKind.sunday;
-					
-				route1.setTheNumberOfServices(kind);
 				for (int k = 0; k < route1.getTheNumberOfServices(); k++)
 				{
 					if(driverRoster[i][j][k].getDriverID() == id)
 					{
-						for(int i2 = 0; i2 < driverRoster[i][j][k].getServiceNumbersAssigned().size(); i2++)
-						{
-							int[] services = TimetableInfo.getServices(routeIDs[j], kind);
-							driverRoster[i][j][k].setServiceIDsAssigned(services[driverRoster[i][j][k].getServiceNumbersAssigned().get(i2)]);
-						}
 						return driverRoster[i][j][k];
 					}
-					else
-						System.out.println("test");
 				}
 			}
 			
