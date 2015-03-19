@@ -413,7 +413,7 @@ public class Rostering
 						for(int i2 = 0; i2 < driverRoster[i][j][k].getServiceNumbersAssigned().size(); i2++)
 						{
 							int[] services = TimetableInfo.getServices(routeIDs[j], kind);
-							driverRoster[i][j][k].setServiceNumbersAssigned(driverRoster[i][j][k].getServiceNumbersAssigned().get(i2));
+							driverRoster[i][j][k].setServiceIDsAssigned(services[driverRoster[i][j][k].getServiceNumbersAssigned().get(i2)]);
 						}
 						return driverRoster[i][j][k];
 					}
