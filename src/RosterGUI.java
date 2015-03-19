@@ -1,3 +1,8 @@
+import java.util.Date;
+
+import DRH.*;
+import rostering.*;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT; 
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -23,25 +28,52 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.joda.time.LocalDate;
 
-public class RosterGUI  {
+public class RosterGUI {
+  
+  private static Object[][][] rosterDrivers, rosterBuses;
+  private static String[] driverNames;
+  private static int[] driverIDs, DriverIDs;
+  private static int sz;
+  public static Date datedf;
+  
   
   public static void main(String[] args) { 
-    new RosterGUI(); 
+      database.openBusDatabase();
+      driverIDs = DriverInfo.getDrivers();
+      driverNames = new String [driverIDs.length];
+      
+      String date = "2015-02-05"; 
+	  LocalDate datejd = new LocalDate(date);
+	  datedf = datejd.toDate();
+      
+      DriverIDs = DriverInfo.getDrivers();
+      sz = DriverIDs.length;
+      
+      //reset hours this week
+      for(int i=0; i<sz; i++){
+   	    DriverInfo.setHoursThisWeek(DriverIDs[i], 0);
+      }
+	  rosterDrivers = null;
+	  rosterBuses = null;
+	  
+	  new RosterGUI(); 
   } 
 	
   public RosterGUI() {	  
     final Display display = Display.getDefault(); 
-	final Shell mainWindowShell = new Shell(display, SWT.CLOSE); 
-	mainWindowShell.setText("Main Shell"); 
+	final Shell shell = new Shell(display, SWT.CLOSE);
+	shell.setSize(507, 272); 
+	shell.setText("Main Shell"); 
 
-	Button spawn = new Button(mainWindowShell, SWT.PUSH); 
+	Button spawn = new Button(shell, SWT.PUSH);
 	spawn.setText("Driver"); 
-	spawn.setBounds(85, 116, 93, 30); 
+	spawn.setBounds(85, 163, 93, 30); 
 	spawn.addSelectionListener(new SelectionListener() { 
 	  @Override 
 	  public void widgetSelected(SelectionEvent e) {  
-	    new DriverInfoShell(display);
+	    new DriverShell(display);
 	  } 
 
 	  @Override 
@@ -50,37 +82,59 @@ public class RosterGUI  {
 	  } 
 	}); 
 
-	mainWindowShell.addListener(SWT.Close, new Listener() { 
+	shell.addListener(SWT.Close, new Listener() { 
 	  @Override 
 	  public void handleEvent(Event event) { 
 	    display.dispose(); 
 	  } 
 	}); 
-
-	mainWindowShell.setSize(507, 272); 
 	     
-	Label lblNewLabel_3 = new Label(mainWindowShell, SWT.NONE);
-	lblNewLabel_3.setBounds(162, 66, 197, 17);
+	Label lblNewLabel_3 = new Label(shell, SWT.NONE);
+	lblNewLabel_3.setBounds(154, 117, 197, 17);
 	lblNewLabel_3.setText("What function do you want to use?");
 	     
-	Button btnNewButton_1 = new Button(mainWindowShell, SWT.NONE);
+	Button btnNewButton_1 = new Button(shell, SWT.NONE);
 	btnNewButton_1.addSelectionListener(new SelectionAdapter() {
 	  @Override
 	  public void widgetSelected(SelectionEvent e) {
-		new ControllerInfoShell(display);
+		new ControllerDriverHoursView(display);
 	  }
 	});
-	btnNewButton_1.setBounds(214, 116, 77, 31);
+	btnNewButton_1.setBounds(219, 162, 77, 31);
 	btnNewButton_1.setText("Controller");
 	     
-	Button btnNewButton_2 = new Button(mainWindowShell, SWT.NONE);
+	Button btnNewButton_2 = new Button(shell, SWT.NONE);
 	btnNewButton_2.setEnabled(false);
-	btnNewButton_2.setBounds(325, 115, 77, 31);
+	btnNewButton_2.setBounds(328, 162, 77, 31);
 	btnNewButton_2.setText("Customer");
-	mainWindowShell.open(); 
+	
+	Button btnNewButton = new Button(shell, SWT.NONE);
+	btnNewButton.addSelectionListener(new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			rosterDrivers = Rostering.assignDrivers(datedf);
+//		    rosterBuses = Rostering.assignBuses();
+		}
+	});
+	btnNewButton.setBounds(141, 55, 104, 31);
+	btnNewButton.setText("Generate Roster");
+	
+	Text text = new Text(shell, SWT.BORDER);
+	text.setBounds(291, 55, 75, 27);
+	
+	shell.open(); 
 	     
 	while (!display.isDisposed()) { 
 	  try { 
+		if ((rosterDrivers != null) /*&& (rosterBuses != null)*/) {
+	      text.setText("Done !");
+	      spawn.setEnabled(true);
+		  btnNewButton_1.setEnabled(true);
+		}
+		else {
+			spawn.setEnabled(false);
+			btnNewButton_1.setEnabled(false);
+		}
 	    if (!display.readAndDispatch()) { 
 	      display.sleep(); 
 	    } 
@@ -89,56 +143,6 @@ public class RosterGUI  {
 	    e.printStackTrace(); 
 	  } 
 	} 
-  } 
-	
-  private class DriverInfoShell { 
-    protected Shell shell;
-	private Text text;
-	private Text text_1;
-	private Button btnNewButton;
-	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-     
-	public DriverInfoShell(final Display display) { 
-	  final Display driverShellDisplay = display;
-      shell = new Shell(display, SWT.CLOSE);
- 	  shell.setSize(450, 300);
- 	  shell.setText("Enter ID & day");
- 	  shell.open();
-	 
- 	 Label lblNewLabel = new Label(shell, SWT.NONE);
-		lblNewLabel.setBounds(120, 74, 76, 17);
-		lblNewLabel.setText("Enter yor ID : ");
-		
-		text = new Text(shell, SWT.BORDER);
-		text.setBounds(263, 74, 75, 27);
-		formToolkit.adapt(text, true, true);
-		
-		btnNewButton = new Button(shell, SWT.NONE);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				shell.dispose();
-				new DriverShell(display);
-			}
-		});
-		btnNewButton.setBounds(187, 203, 55, 27);
-		formToolkit.adapt(btnNewButton, true, true);
-		btnNewButton.setText("OK");
-		
-		Label lblNewLabel_1 = formToolkit.createLabel(shell, "Select day of week :", SWT.NONE);
-		lblNewLabel_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		lblNewLabel_1.setBounds(120, 136, 122, 17);
-		
-		text_1 = new Text(shell, SWT.BORDER);
-		text_1.setBounds(263, 136, 75, 27);
-		formToolkit.adapt(text_1, true, true);		
-		
-	  while (!shell.isDisposed()) {
-	    if (!display.readAndDispatch()) {
-		  display.sleep();
-		}
-	  }
-    } 
   } 
 
   private class DriverShell { 
@@ -150,10 +154,10 @@ public class RosterGUI  {
 	  shell = new Shell(display, SWT.CLOSE);
 	  shell.setText("Driver");
 			
-		shell.setSize(421, 514);
+		shell.setSize(700, 800);
 		
-	  ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setBounds(10, 10, 400, 425);
+		ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite.setBounds(10, 61, 678, 661);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		
@@ -162,24 +166,25 @@ public class RosterGUI  {
 		table.setLinesVisible(true);
 		
 		TableColumn tblclmnNewColumn_2 = new TableColumn(table, SWT.NONE);
-		tblclmnNewColumn_2.setWidth(131);
+		tblclmnNewColumn_2.setWidth(236);
 		tblclmnNewColumn_2.setText("Service");
 		
 		TableColumn tblclmnNewColumn_3 = new TableColumn(table, SWT.NONE);
-		tblclmnNewColumn_3.setWidth(133);
+		tblclmnNewColumn_3.setWidth(230);
 		tblclmnNewColumn_3.setText("Bus");
 		
 		TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
 		tblclmnNewColumn.setWidth(94);
 		tblclmnNewColumn.setText("Times");
 		
-		int rows = 20;
+		// Kamil's method
+		int rows = rosterDrivers[2].length; 
 		for (int i = 0; i < rows; i++) {
 			TableItem item = new TableItem(table, SWT.NONE);
-		    item.setText(0, "1");
+		    item.setText(0, new Integer(i + 1).toString());
+		    
 		    item.setText(1, "2");
 		    item.setText(2, "3");
-		    item.setText(3, "4");
 		}
 		
 		scrolledComposite.setContent(table);
@@ -192,20 +197,33 @@ public class RosterGUI  {
 				shell.dispose();
 			}
 		});
-		btnNewButton.setBounds(113, 444, 77, 31);
+		btnNewButton.setBounds(307, 732, 77, 31);
 		btnNewButton.setText("OK");
 		
-		Button btnNewButton_1 = new Button(shell, SWT.NONE);
-		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				shell.dispose();
-				new DriverInfoShell(display);
-			}
-		});
-		btnNewButton_1.setBounds(265, 444, 77, 31);
-		btnNewButton_1.setText("Back");
-
+		Combo combo = new Combo(shell, SWT.NONE);
+		combo.setBounds(85, 21, 129, 29);
+		
+		combo.add(rosterDrivers[0][0][0]);
+		combo.add("2015");
+		
+		Label lblNewLabel = new Label(shell, SWT.NONE);
+		lblNewLabel.setBounds(21, 21, 58, 17);
+		lblNewLabel.setText("Driver ID :");
+		
+		Label lblDay = new Label(shell, SWT.NONE);
+		lblDay.setText("Day :");
+		lblDay.setBounds(255, 21, 34, 17);
+		
+		Combo combo_1 = new Combo(shell, SWT.NONE);
+		combo_1.setBounds(295, 21, 129, 29);
+		combo_1.add("Monday");
+		combo_1.add("Tuesday");
+		combo_1.add("Wednesday");
+		combo_1.add("Thursday");
+		combo_1.add("Friday");
+		combo_1.add("Saturday");
+		combo_1.add("Sunday");
+		
 		shell.open();
 		shell.layout();
 		
@@ -216,73 +234,19 @@ public class RosterGUI  {
 	  }
 	} 
   }
-  
-  private class ControllerInfoShell { 
-	    protected Shell shell;
-	    private Text text;
-	     
-		public ControllerInfoShell(Display display) { 
-		  final Display driverShellDisplay = display;
-	      shell = new Shell(display, SWT.CLOSE);
-	 	  shell.setSize(450, 300);
-	 	  shell.setText("Select Day & Route");
-	 	  shell.open();
-	 	  shell.layout();
-	 	  
-	 	 Composite composite = new Composite(shell, SWT.NONE);
-			composite.setBounds(10, 10, 428, 253);
-			
-			Label lblNewLabel = new Label(composite, SWT.NONE);
-			lblNewLabel.setBounds(98, 88, 118, 17);
-			lblNewLabel.setText("Select day of week :");
-			
-			text = new Text(composite, SWT.BORDER);
-			text.setBounds(265, 88, 75, 27);
-			
-			Button btnNewButton = new Button(composite, SWT.NONE);
-			btnNewButton.setBounds(176, 189, 77, 31);
-			btnNewButton.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					String driverID = text.getText();
-					shell.dispose();
-				    new ControllerOverallView(driverShellDisplay);
-				}
-			});
-			btnNewButton.setText("OK");
-			
-			Label lblChooseARoute = new Label(composite, SWT.NONE);
-			lblChooseARoute.setBounds(98, 135, 118, 17);
-			lblChooseARoute.setText("Chose a Route :");
-			
-			Combo combo = new Combo(composite, SWT.NONE);
-			combo.setBounds(265, 135, 75, 29);
-	       
-			combo.add("383");
-			combo.add("384");
-			combo.add("358out");
-			combo.add("358back");
-	 	  
-		  while (!shell.isDisposed()) {
-		    if (!display.readAndDispatch()) {
-			  display.sleep();
-			}
-		  }
-	    } 
-  } 
-  
-  private class ControllerOverallView { 
+ 
+  private class ControllerDriverHoursView { 
 	    protected Shell shell;
 		private Table table;
 		     
-		public ControllerOverallView(final Display display) { 
+		public ControllerDriverHoursView(final Display display) { 
 		  final Display driverInfoShellDisplay = display;
 		  shell = new Shell(display, SWT.CLOSE);
-		  shell.setSize(482, 556);
-		  shell.setText("Controller Overall");
+			shell.setSize(700, 800);
+		  shell.setText("Driver Hours View");
           		  
-			ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-			scrolledComposite.setBounds(10, 10, 460, 473);
+		  ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+			scrolledComposite.setBounds(10, 61, 678, 661);
 			scrolledComposite.setExpandHorizontal(true);
 			scrolledComposite.setExpandVertical(true);
 			
@@ -290,78 +254,94 @@ public class RosterGUI  {
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
 			
-			TableColumn tblclmnNewColumn_3 = new TableColumn(table, SWT.NONE);
-			tblclmnNewColumn_3.setWidth(103);
-			tblclmnNewColumn_3.setText("Service");
-			
-			TableColumn tblclmnNewColumn_2 = new TableColumn(table, SWT.NONE);
-			tblclmnNewColumn_2.setWidth(106);
-			tblclmnNewColumn_2.setText("Bus");
-			
 			TableColumn tblclmnNewColumn_1 = new TableColumn(table, SWT.NONE);
-			tblclmnNewColumn_1.setWidth(125);
-			tblclmnNewColumn_1.setText("Driver");
+			tblclmnNewColumn_1.setWidth(164);
+			tblclmnNewColumn_1.setText("Day");
 			
 			TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
-			tblclmnNewColumn.setWidth(57);
+			tblclmnNewColumn.setWidth(162);
 			tblclmnNewColumn.setText("Times");
+			
+			TableColumn tblclmnNewColumn_3 = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn_3.setWidth(175);
+			tblclmnNewColumn_3.setText("Hours Worked");
+			
+			TableColumn tblclmnNewColumn_2 = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn_2.setWidth(88);
+			tblclmnNewColumn_2.setText("No. of Breaks");
 			scrolledComposite.setContent(table);
 			scrolledComposite.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			
-			int rows = 20;
+			// Kamil's method
+			int rows = 30;
 			for (int i = 0; i < rows; i++) {
 				TableItem item = new TableItem(table, SWT.NONE);
 			    item.setText(0, "1");
 			    item.setText(1, "2");
 			    item.setText(2, "3");
-			    item.setText(3, "4");
 			}
 			
-			Button btnNewButton = new Button(shell, SWT.NONE);
-			btnNewButton.setBounds(266, 489, 77, 31);
-			btnNewButton.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					shell.dispose();
-				}
-			});
-			btnNewButton.setText("OK");
+			Label lblDriver = new Label(shell, SWT.NONE);
+			lblDriver.setText("Driver ID :");
+			lblDriver.setBounds(21, 21, 58, 17);
 			
-			Button btnNewButton_1 = new Button(shell, SWT.NONE);
-			btnNewButton_1.setBounds(374, 489, 77, 31);
-			btnNewButton_1.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					shell.dispose();
-					new ControllerInfoShell(display);
-				}
-			});
-			btnNewButton_1.setText("Back");
-
+			// Kamil's method
 			final Combo combo = new Combo(shell, SWT.NONE);
 			combo.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					if (combo.getText().equals("Bus View")) {
-						shell.dispose();
-						new ControllerBusView(display);
-				    } 
-					else {
-						shell.dispose();
-						new ControllerDriverView(display);
+					
+				}
+			});
+			combo.setBounds(85, 21, 129, 29);
+			
+			Button button = new Button(shell, SWT.NONE);
+			button.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					shell.dispose();
+				}
+			});
+			button.setText("OK");
+			button.setBounds(307, 732, 77, 31);
+
+			// Kamil's method
+			combo.add("2014");
+			combo.add("2015");
+			
+			Label lblView = new Label(shell, SWT.NONE);
+			lblView.setText("View :");
+			lblView.setBounds(255, 21, 34, 17);
+			
+			final Combo combo_1 = new Combo(shell, SWT.NONE);
+			combo_1.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					switch(combo_1.getText()) {
+					case "Bus Hours View":
+						  shell.dispose();
+						  new ControllerBusHoursView(display);
+						break;
+					case "Driver Services View":
+						  new ControllerDriverServicesView(display);
+						break;
+					case "Bus Services View":
+					      new ControllerBusServicesView(display);
+					    break;
+					case "Days View":
+						  new ControllerDaysView(display);
+						break;
 					}
 				}
 			});
-			combo.setBounds(105, 489, 103, 29);
-			
-			Label lblNewLabel = new Label(shell, SWT.NONE);
-			lblNewLabel.setBounds(20, 489, 58, 17);
-			lblNewLabel.setText("Switch to :");
-	       
-			combo.add("Bus View");
-			combo.add("Driver View");
-			
-		  shell.open();
+			combo_1.setBounds(295, 21, 129, 29);
+			combo_1.add("Bus Hours View");
+			combo_1.add("Driver Services View");
+			combo_1.add("Bus Services View");
+		    combo_1.add("Days View");
+		    		
+		    		
+		   shell.open();
 	      shell.layout();
 		  
 		  while (!shell.isDisposed()) {
@@ -372,18 +352,18 @@ public class RosterGUI  {
 		} 
 	  }
   
-    private class ControllerBusView { 
+    private class ControllerBusHoursView { 
 	    protected Shell shell;
 		private Table table;
 		     
-		public ControllerBusView(final Display display) { 
+		public ControllerBusHoursView(final Display display) { 
 		  final Display driverInfoShellDisplay = display;
 		  shell = new Shell();
-			shell.setSize(457, 614);
-			shell.setText("Controller Bus");
+			shell.setSize(700, 800);
+			shell.setText("Bus Hours View");
 			
 			ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-			scrolledComposite.setBounds(10, 10, 431, 530);
+			scrolledComposite.setBounds(10, 61, 678, 661);
 			scrolledComposite.setExpandHorizontal(true);
 			scrolledComposite.setExpandVertical(true);
 			
@@ -392,19 +372,20 @@ public class RosterGUI  {
 			table.setLinesVisible(true);
 			
 			TableColumn tblclmnNewColumn_1 = new TableColumn(table, SWT.NONE);
-			tblclmnNewColumn_1.setWidth(142);
-			tblclmnNewColumn_1.setText("Bus");
+			tblclmnNewColumn_1.setWidth(233);
+			tblclmnNewColumn_1.setText("Days");
+			
+			TableColumn tblclmnNewColumn_3 = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn_3.setWidth(204);
+			tblclmnNewColumn_3.setText("Times");
 			
 			TableColumn tblclmnNewColumn_2 = new TableColumn(table, SWT.NONE);
-			tblclmnNewColumn_2.setWidth(141);
-			tblclmnNewColumn_2.setText("Service");
-			
-			TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
-			tblclmnNewColumn.setWidth(109);
-			tblclmnNewColumn.setText("Times");
+			tblclmnNewColumn_2.setWidth(132);
+			tblclmnNewColumn_2.setText("Hours Used");
 			scrolledComposite.setContent(table);
 			scrolledComposite.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			
+			// Kamil's method
 			int rows = 30;
 			for (int i = 0; i < rows; i++) {
 				TableItem item = new TableItem(table, SWT.NONE);
@@ -413,26 +394,19 @@ public class RosterGUI  {
 			    item.setText(2, "3");
 			}
 			
-			Label label = new Label(shell, SWT.NONE);
-			label.setText("Switch to :");
-			label.setBounds(10, 546, 58, 17);
+			Label lblBusId = new Label(shell, SWT.NONE);
+			lblBusId.setText("Bus ID :");
+			lblBusId.setBounds(21, 21, 58, 17);
 			
+			// Kamil's method
 			final Combo combo = new Combo(shell, SWT.NONE);
 			combo.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					if (combo.getText().equals("Overall View")) {
-						shell.dispose();
-						new ControllerOverallView(display);
-				    } 
-					else {
-						shell.dispose();
-						new ControllerDriverView(display);
-						
-					}
+					
 				}
 			});
-			combo.setBounds(95, 546, 103, 29);
+			combo.setBounds(85, 21, 129, 29);
 			
 			Button button = new Button(shell, SWT.NONE);
 			button.setText("OK");
@@ -442,21 +416,42 @@ public class RosterGUI  {
 					shell.dispose();
 				}
 			});
-			button.setBounds(256, 546, 77, 31);
+			button.setBounds(307, 732, 77, 31);
+
+			// Kamil's method
+			combo.add("2014");
+			combo.add("2015");
 			
-			Button button_1 = new Button(shell, SWT.NONE);
-			button_1.setText("Back");
-			button_1.addSelectionListener(new SelectionAdapter() {
+			Label label = new Label(shell, SWT.NONE);
+			label.setText("View :");
+			label.setBounds(255, 21, 34, 17);
+			
+			final Combo combo_1 = new Combo(shell, SWT.NONE);
+			combo_1.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					shell.dispose();
-					new ControllerInfoShell(display);
+					switch(combo_1.getText()) {
+					case "Driver Hours View":
+						  shell.dispose();
+						  new ControllerDriverHoursView(display);
+						break;
+					case "Driver Services View":
+						  new ControllerDriverServicesView(display);
+						break;
+					case "Bus Services View":
+					      new ControllerBusServicesView(display);
+					    break;
+					case "Days View":
+						  new ControllerDaysView(display);
+						break;
+					}
 				}
 			});
-			button_1.setBounds(364, 546, 77, 31);
-
-			combo.add("Overall View");
-			combo.add("Driver View");
+			combo_1.setBounds(295, 21, 129, 29);
+			combo_1.add("Driver Hours View");
+			combo_1.add("Driver Services View");
+			combo_1.add("Bus Services View");
+		    combo_1.add("Days View");
 			
 		  shell.open();
 	      shell.layout();
@@ -469,11 +464,11 @@ public class RosterGUI  {
 		} 
 	  }
     
-    private class ControllerDriverView { 
+    private class ControllerDriverServicesView { 
 	    protected Shell shell;
 		private Table table;
 		     
-		public ControllerDriverView(final Display display) { 
+		public ControllerDriverServicesView(final Display display) { 
 		  final Display driverInfoShellDisplay = display;
 		  shell = new Shell();
 			shell.setSize(457, 614);
@@ -520,11 +515,11 @@ public class RosterGUI  {
 				public void widgetSelected(SelectionEvent e) {
 					if (combo.getText().equals("Overall View")) {
 						shell.dispose();
-						new ControllerOverallView(display);
+						//new ControllerOverallView(display);
 				    } 
 					else {
 						shell.dispose();
-						new ControllerBusView(display);
+						//new ControllerBusView(display);
 					}
 				}
 			});
@@ -546,7 +541,7 @@ public class RosterGUI  {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					shell.dispose();
-					new ControllerInfoShell(display);
+					//new ControllerInfoShell(display);
 				}
 			});
 			button_1.setBounds(364, 546, 77, 31);
@@ -565,4 +560,195 @@ public class RosterGUI  {
 		} 
 	  }
   
+    private class ControllerBusServicesView { 
+	    protected Shell shell;
+		private Table table;
+		     
+		public ControllerBusServicesView(final Display display) { 
+		  final Display driverInfoShellDisplay = display;
+		  shell = new Shell();
+			shell.setSize(457, 614);
+			shell.setText("Controller Driver");
+			
+			ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+			scrolledComposite.setBounds(10, 10, 431, 530);
+			scrolledComposite.setExpandHorizontal(true);
+			scrolledComposite.setExpandVertical(true);
+			
+			table = new Table(scrolledComposite, SWT.BORDER | SWT.FULL_SELECTION);
+			table.setHeaderVisible(true);
+			table.setLinesVisible(true);
+			
+			TableColumn tblclmnNewColumn_1 = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn_1.setWidth(142);
+			tblclmnNewColumn_1.setText("Driver");
+			
+			TableColumn tblclmnNewColumn_2 = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn_2.setWidth(141);
+			tblclmnNewColumn_2.setText("Service");
+			
+			TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn.setWidth(109);
+			tblclmnNewColumn.setText("Times");
+			scrolledComposite.setContent(table);
+			scrolledComposite.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			
+			int rows = 30;
+			for (int i = 0; i < rows; i++) {
+				TableItem item = new TableItem(table, SWT.NONE);
+			    item.setText(0, "1");
+			    item.setText(1, "2");
+			    item.setText(2, "3");
+			}
+			
+			Label label = new Label(shell, SWT.NONE);
+			label.setText("Switch to :");
+			label.setBounds(10, 546, 58, 17);
+			
+			final Combo combo = new Combo(shell, SWT.NONE);
+			combo.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					if (combo.getText().equals("Overall View")) {
+						shell.dispose();
+						//new ControllerOverallView(display);
+				    } 
+					else {
+						shell.dispose();
+						//new ControllerBusView(display);
+					}
+				}
+			});
+			combo.setBounds(95, 546, 103, 29);
+			
+			Button button = new Button(shell, SWT.NONE);
+			button.setText("OK");
+			button.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					shell.dispose();
+				}
+			});
+			button.setBounds(256, 546, 77, 31);
+			
+			Button button_1 = new Button(shell, SWT.NONE);
+			button_1.setText("Back");
+			button_1.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					shell.dispose();
+					//new ControllerInfoShell(display);
+				}
+			});
+			button_1.setBounds(364, 546, 77, 31);
+
+			combo.add("Overall View");
+			combo.add("Bus View");
+			
+		  shell.open();
+	      shell.layout();
+		  
+		  while (!shell.isDisposed()) {
+		    if (!display.readAndDispatch()) {
+	          display.sleep();
+			}
+		  }
+		} 
+	  }
+    
+    private class ControllerDaysView { 
+	    protected Shell shell;
+		private Table table;
+		     
+		public ControllerDaysView(final Display display) { 
+		  final Display driverInfoShellDisplay = display;
+		  shell = new Shell();
+			shell.setSize(457, 614);
+			shell.setText("Controller Driver");
+			
+			ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+			scrolledComposite.setBounds(10, 10, 431, 530);
+			scrolledComposite.setExpandHorizontal(true);
+			scrolledComposite.setExpandVertical(true);
+			
+			table = new Table(scrolledComposite, SWT.BORDER | SWT.FULL_SELECTION);
+			table.setHeaderVisible(true);
+			table.setLinesVisible(true);
+			
+			TableColumn tblclmnNewColumn_1 = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn_1.setWidth(142);
+			tblclmnNewColumn_1.setText("Driver");
+			
+			TableColumn tblclmnNewColumn_2 = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn_2.setWidth(141);
+			tblclmnNewColumn_2.setText("Service");
+			
+			TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
+			tblclmnNewColumn.setWidth(109);
+			tblclmnNewColumn.setText("Times");
+			scrolledComposite.setContent(table);
+			scrolledComposite.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			
+			int rows = 30;
+			for (int i = 0; i < rows; i++) {
+				TableItem item = new TableItem(table, SWT.NONE);
+			    item.setText(0, "1");
+			    item.setText(1, "2");
+			    item.setText(2, "3");
+			}
+			
+			Label label = new Label(shell, SWT.NONE);
+			label.setText("Switch to :");
+			label.setBounds(10, 546, 58, 17);
+			
+			final Combo combo = new Combo(shell, SWT.NONE);
+			combo.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					if (combo.getText().equals("Overall View")) {
+						shell.dispose();
+						//new ControllerOverallView(display);
+				    } 
+					else {
+						shell.dispose();
+						//new ControllerBusView(display);
+					}
+				}
+			});
+			combo.setBounds(95, 546, 103, 29);
+			
+			Button button = new Button(shell, SWT.NONE);
+			button.setText("OK");
+			button.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					shell.dispose();
+				}
+			});
+			button.setBounds(256, 546, 77, 31);
+			
+			Button button_1 = new Button(shell, SWT.NONE);
+			button_1.setText("Back");
+			button_1.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					shell.dispose();
+					//new ControllerInfoShell(display);
+				}
+			});
+			button_1.setBounds(364, 546, 77, 31);
+
+			combo.add("Overall View");
+			combo.add("Bus View");
+			
+		  shell.open();
+	      shell.layout();
+		  
+		  while (!shell.isDisposed()) {
+		    if (!display.readAndDispatch()) {
+	          display.sleep();
+			}
+		  }
+		} 
+	  }
 } 
