@@ -16,6 +16,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import rostering.Bus;
 import rostering.Rostering;
+import rostering.Routes;
 
 import DRH.TimetableInfo.timetableKind;
 
@@ -29,7 +30,8 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args){
+    public static void main(String[] args)
+    {
         database.openBusDatabase();
         int[] driverIDs = DriverInfo.getDrivers();
         String[] driverNames = new String [driverIDs.length];
@@ -85,18 +87,36 @@ public class Main {
     	   DriverInfo.setHoursThisWeek(DriverIDs[i], 0);
        }
 
-             
-       Rostering.assignDrivers(datedf);
-        
+       int[] routeIDs = BusStopInfo.getRoutes();
 
-//
-//        
-//        int a = TimetableInfo.getNumberOfServices(66, timetableKind.weekday);
-//        System.out.println("services :" + a);
-//        
-//        int b[] = TimetableInfo.getServiceTimes(65,timetableKind.weekday ,20);
-//        for (int i = 0; i < b.length; i++)
-//        	System.out.println("times: " + b[i]);
-//        
+       int[] services = TimetableInfo.getServices(68, timetableKind.weekday);
+       
+       System.out.println("service first: " + services[0] + " route first " + routeIDs[0]);
+       
+
+		Routes route1 = new Routes(routeIDs[0]);
+       route1.setTheNumberOfServices(timetableKind.weekday);
+       int from = TimetableInfo.getServiceTimes(68, timetableKind.weekday, 0)[0];
+       
+       System.out.println("from: " + from);
+     // Rostering.assignDrivers(datedf);
+       
+    
     }
+     public static void testDate(Date date )
+     {
+    	 LocalDate datelc = new LocalDate (date);
+    	 
+    	 for (int i = 0; i < 10; i++)
+    	 { 
+    		 Date datedt = datelc.toDate();
+    		 System.out.println("date "  + datedt);
+    		 datelc = datelc.plusDays(1);
+    		 
+    	 }
+    	 
+    	 
+     }
+    
+    
 }
