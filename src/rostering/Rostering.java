@@ -10,7 +10,7 @@ import org.joda.time.LocalDate;
 
 public class Rostering
 {
-	public static int a = 0;
+    public static int a = 0;
 	public static int b = 0;
 	public static int c = 0;
 
