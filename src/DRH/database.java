@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Date;
 
 import rostering.Driver;
 
@@ -23,8 +24,8 @@ public class database
 	protected String user = "";
 	protected String password = "";
 	protected Class driver_class = null;
-	protected Connection connection = null;
-	protected ResultSet results = null;
+	protected static Connection connection = null;
+	protected static ResultSet results = null;
 	protected String current_table = "";
 	protected Boolean error = false;
 
@@ -48,8 +49,8 @@ public class database
 	{
 		try
 		{
-			busDatabase = new database("kamil", "remote",
-					"heaven", "jdbc:mysql://venus.rjv.me:3306",
+			busDatabase = new database("2014_comp23420_q4", "mbax2ko2",
+					"asdf1234", "jdbc:mysql://dbhost.cs.man.ac.uk:3306",
 					"com.mysql.jdbc.Driver");
 			busDatabase.open();
 		} catch (Exception ex)
@@ -180,13 +181,13 @@ public class database
 	}
 	
 	// Razvan
-	public ArrayList<Driver> driver_selection(String source, String field1, int threshold,int limit, String field2, Date date)
+	public static ArrayList<Driver> driver_selectionint(int limit, Date date)
 	{
 		try
 		{
 			ArrayList<Driver> result = new ArrayList<Driver>();
 			Statement s = connection.createStatement();
-			s.execute("Select * From " + source + "WHERE" + field1 + "<>" + threshold + "ORDER_BY" + "" + field2);
+			s.execute("Select * FROM driver WHERE hours_this_week <> 0 ORDER BY hours_this_week ASC");
 			
 			int limits = 0;
 			
@@ -215,13 +216,13 @@ public class database
 	}
 	
 	// Razvan
-	public ArrayList<Driver> driver_selection(String source, String field1, int limit, Date date)
+	public static ArrayList<Driver> driver_selection(int limit, Date date)
 	{
 		try
 		{
 			ArrayList<Driver> result = new ArrayList<Driver>();
 			Statement s = connection.createStatement();
-			s.execute("Select * From " + source + "ORDER_BY" + "" + field1 );
+			s.execute("Select * From driver ORDER BY hours_this_week ASC");
 			
 			int limits = 0;
 			

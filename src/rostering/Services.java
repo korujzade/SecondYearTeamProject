@@ -1,5 +1,7 @@
 package rostering;
 
+import java.util.ArrayList;
+
 import DRH.TimetableInfo;
 import DRH.TimetableInfo.timetableKind;
 
@@ -10,6 +12,9 @@ public class Services
 	private int kind;
 	private int route;
 	private int serviceNumber;
+	
+//	ArrayList<Bus> assignedBusses = new ArrayList<Bus>();
+//	ArrayList<Driver> assignedDrivers= new ArrayList<Driver>();
 
 	public Services(int route, timetableKind kind, int serviceNumber)
 	{

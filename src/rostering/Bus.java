@@ -6,7 +6,7 @@ public class Bus
 {
 
 	ArrayList<Integer> endTimes = new ArrayList();
-	int BusID;
+	Integer BusID;
 	int time;
 //	int from;
 //	int to;
@@ -41,7 +41,7 @@ public class Bus
 		endTimes.add(time);
 	}
 	
-	public int getBusID()
+	public Integer getBusID()
 	{
 		return this.BusID;
 	}

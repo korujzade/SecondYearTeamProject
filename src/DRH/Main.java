@@ -38,69 +38,72 @@ public class Main {
 
         
         // debugging
+////
+////        int b[] = TimetableInfo.getServices(66, timetableKind.weekday);
+////        for (int i = 0; i < b.length; i++)
+////		{
+////        	int a[] = TimetableInfo.getServiceTimes(66,timetableKind.weekday, i);
+////        	for (int j = 0; j < a.length; j++)
+////			{
+////				System.out.print(" "+ a[j]+" ");
+////			}
+////        	System.out.println();
+////		}
+////        
+//        
+//        //int a = TimetableInfo.getNumberOfServices(68, timetableKind.weekday);
+////        /System.out.println("68: " + a);
+////        
+////       int[][] testArray = new int[2][2];
+////       
+////       testArray[0][0] = 1;
+////       testArray[0][1] = 1;
+////       testArray[1][0] = 2;
+////       
+////       int index = 0;
+////       for (int i = 0; i < testArray.length; i++)
+////	   {
+////	     if (testArray[i][0] == 2)
+////	     {
+////	    	 index = i;
+////	    	 testArray[0][1]++;
+////	    	 break;
+////	     }
+////	   }
+////       System.out.println("array length: " + testArray.length);
+////       System.out.println("firt used number: " + testArray[0][1]);
+////       System.out.println("index: " + index);
+////       
+//       
+//       String date = "2015-02-05"; 
+//       LocalDate datejd = new LocalDate(date);
+//       
+//       Date datedf = datejd.toDate();
+//       int[] DriverIDs = DriverInfo.getDrivers();
+//       int sz = DriverIDs.length;
+//       
+//       //reset hours this week
+//       for(int i=0; i<sz; i++){
+//    	   DriverInfo.setHoursThisWeek(DriverIDs[i], 0);
+//       }
 //
-//        int b[] = TimetableInfo.getServices(66, timetableKind.weekday);
-//        for (int i = 0; i < b.length; i++)
-//		{
-//        	int a[] = TimetableInfo.getServiceTimes(66,timetableKind.weekday, i);
-//        	for (int j = 0; j < a.length; j++)
-//			{
-//				System.out.print(" "+ a[j]+" ");
-//			}
-//        	System.out.println();
-//		}
-//        
+//       int[] routeIDs = BusStopInfo.getRoutes();
+//
+//       int[] services = TimetableInfo.getServices(68, timetableKind.weekday);
+//       
+//       System.out.println("service first: " + services[1] + " route first " + routeIDs[0]);
+//       
+//
+//		Routes route1 = new Routes(routeIDs[0]);
+//       route1.setTheNumberOfServices(timetableKind.weekday);
+//       int from = TimetableInfo.getServiceTimes(68, timetableKind.weekday, 1)[0];
         
-        //int a = TimetableInfo.getNumberOfServices(68, timetableKind.weekday);
-//        /System.out.println("68: " + a);
-//        
-//       int[][] testArray = new int[2][2];
-//       
-//       testArray[0][0] = 1;
-//       testArray[0][1] = 1;
-//       testArray[1][0] = 2;
-//       
-//       int index = 0;
-//       for (int i = 0; i < testArray.length; i++)
-//	   {
-//	     if (testArray[i][0] == 2)
-//	     {
-//	    	 index = i;
-//	    	 testArray[0][1]++;
-//	    	 break;
-//	     }
-//	   }
-//       System.out.println("array length: " + testArray.length);
-//       System.out.println("firt used number: " + testArray[0][1]);
-//       System.out.println("index: " + index);
-//       
-       
-       String date = "2015-02-05"; 
-       LocalDate datejd = new LocalDate(date);
-       
-       Date datedf = datejd.toDate();
-       int[] DriverIDs = DriverInfo.getDrivers();
-       int sz = DriverIDs.length;
-       
-       //reset hours this week
-       for(int i=0; i<sz; i++){
-    	   DriverInfo.setHoursThisWeek(DriverIDs[i], 0);
-       }
+        Bus[][][] rosterBus = Rostering.assignBuses(); 
+        		
+//        		Bus[] buses = rosterBus[0][0];  
+//        		
+//        		System.out.println("bus : " + buses[1].getBusID());
 
-       int[] routeIDs = BusStopInfo.getRoutes();
-
-       int[] services = TimetableInfo.getServices(68, timetableKind.weekday);
-       
-       System.out.println("service first: " + services[1] + " route first " + routeIDs[0]);
-       
-
-		Routes route1 = new Routes(routeIDs[0]);
-       route1.setTheNumberOfServices(timetableKind.weekday);
-       int from = TimetableInfo.getServiceTimes(68, timetableKind.weekday, 1)[0];
-       
-       
-       
-       System.out.println("from: " + from);
      // Rostering.assignDrivers(datedf);
        
     

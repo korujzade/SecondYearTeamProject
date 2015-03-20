@@ -91,7 +91,7 @@ public class Driver {
 	    DriverInfo.setHoursThisYear(driverID, driveTime + DriverInfo.getHoursThisYear(driverID));
 	}
 
-	public int getDriverID() {
+	public Integer getDriverID() {
 		return driverID;
 	}
 
